@@ -1,0 +1,122 @@
+/* itconverts — site.css
+ * Shared chrome + content styling for standalone pages (guides, about, privacy…).
+ * Matches "Direction C — Bold": warm near-black canvas, coral accent,
+ * Space Grotesk display + Inter Tight body. Same tokens as itconverts.html.
+ */
+:root{
+  --bg:#0c0b0a; --bg-2:#15130f; --surface:#1a1714; --surface-2:#221d18;
+  --text:#f7f3ec; --muted:#a39a8c; --faint:#6f675b;
+  --border:#2a2520; --border-2:#3a322a;
+  --accent:#ff5c38; --accent-2:#ff7a55; --accent-ink:#ffb59f; --accent-soft:#2a160f;
+  --disp:'Space Grotesk', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --sans:'Inter Tight', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#f6f2ea; --bg-2:#efe9dd; --surface:#ffffff; --surface-2:#f3ede2;
+  --text:#1a1611; --muted:#6f6457; --faint:#9a8d7c;
+  --border:#e6ddcf; --border-2:#d8ccb9;
+  --accent:#e2421e; --accent-2:#c4361a; --accent-ink:#9c2c12; --accent-soft:#fbe6df;
+}
+*{box-sizing:border-box}
+html,body{margin:0; min-height:100%}
+body{background:radial-gradient(120% 80% at 50% -10%, var(--bg-2), var(--bg) 60%); color:var(--text); font-family:var(--sans); font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%; min-height:100vh; display:flex; flex-direction:column}
+.wrap{width:100%; max-width:720px; margin:0 auto; padding:0 22px}
+a{color:var(--accent-ink)}
+
+/* header */
+header{position:sticky; top:0; z-index:30; backdrop-filter:saturate(140%) blur(10px); background:color-mix(in srgb, var(--bg) 78%, transparent); border-bottom:1px solid var(--border)}
+.hwrap{display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:720px; margin:0 auto; padding:14px 22px}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--disp); font-weight:700; font-size:20px; letter-spacing:-.02em; background:none; border:0; color:inherit; cursor:pointer; text-decoration:none}
+.brand .b{width:30px; height:30px; border-radius:9px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; transition:transform .4s}
+.brand:hover .b{transform:rotate(180deg)}
+.brand em{font-style:normal; color:var(--accent)}
+.hnav{display:flex; align-items:center; gap:10px}
+.navlink{display:inline-flex; align-items:center; gap:7px; height:38px; padding:0 13px; border-radius:11px; border:1px solid var(--border-2); background:var(--surface); color:var(--text); font-family:var(--disp); font-weight:600; font-size:13.5px; text-decoration:none; cursor:pointer; white-space:nowrap}
+.navlink:hover{border-color:var(--accent)}
+.navlink.cta{border:0; background:linear-gradient(180deg,var(--accent-2),var(--accent)); color:#fff}
+.navlink svg{width:16px; height:16px}
+.tbtn{width:38px; height:38px; border-radius:11px; border:1px solid var(--border-2); background:var(--surface); color:var(--text); cursor:pointer; display:inline-flex; align-items:center; justify-content:center}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn svg{width:18px;height:18px}
+@media (max-width:560px){ .navlink .lbl{display:none} .navlink{padding:0 11px} }
+
+/* content */
+main{flex:1; padding:30px 0 8px}
+.crumb{font-size:12.5px; color:var(--faint); margin-bottom:14px; font-family:var(--disp); letter-spacing:.02em}
+.crumb a{color:var(--muted); text-decoration:none}
+.crumb a:hover{color:var(--accent)}
+.kicker{font-family:var(--disp); font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accent)}
+.article h1, .page h1{font-family:var(--disp); font-weight:700; letter-spacing:-.03em; font-size:clamp(27px,4.4vw,40px); line-height:1.12; margin:.35em 0 .15em}
+.lede{font-size:clamp(16px,2vw,18.5px); color:var(--muted); margin:0 0 6px}
+.article h2{font-family:var(--disp); font-weight:700; letter-spacing:-.01em; font-size:23px; margin:1.8em 0 .5em; scroll-margin-top:76px}
+.article h3{font-family:var(--disp); font-weight:600; font-size:18px; margin:1.4em 0 .4em}
+.article p, .page p{margin:0 0 1em; color:var(--text)}
+.article ul, .article ol{margin:0 0 1.1em; padding-left:1.25em}
+.article li{margin:.32em 0}
+.article strong, .page strong{font-weight:600}
+hr.rule{border:0; border-top:1px solid var(--border); margin:26px 0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+
+/* formula / callout */
+.formula{font-family:var(--disp); font-size:18px; background:var(--surface); border:1px solid var(--border-2); border-left:3px solid var(--accent); border-radius:12px; padding:14px 16px; margin:0 0 1.1em; overflow-x:auto}
+.callout{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:15px 17px; margin:0 0 1.2em; box-shadow:0 10px 34px rgba(0,0,0,.14)}
+.callout .lbl{font-family:var(--disp); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:6px}
+
+/* tables */
+.tbl-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:14px; margin:0 0 1.3em; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:14.5px}
+caption{caption-side:top; text-align:left; font-family:var(--disp); font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); padding:13px 15px 0}
+th,td{padding:11px 15px; text-align:left; border-bottom:1px solid var(--border)}
+th{font-family:var(--disp); font-weight:600; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted)}
+tbody tr:last-child td{border-bottom:0}
+td.num{font-family:var(--disp); font-variant-numeric:tabular-nums}
+
+/* cards grid (guides hub) */
+.cards{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:8px 0 4px}
+@media (max-width:560px){ .cards{grid-template-columns:1fr} }
+.card{display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:17px 18px; transition:border-color .15s, transform .15s; box-shadow:0 10px 34px rgba(0,0,0,.12)}
+.card:hover{border-color:var(--accent); transform:translateY(-2px)}
+.card .ic{width:34px; height:34px; border-radius:10px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; margin-bottom:11px}
+.card .ic svg{width:18px; height:18px}
+.card h3{font-family:var(--disp); font-weight:600; font-size:16px; margin:0 0 4px}
+.card p{font-size:13px; color:var(--muted); margin:0}
+
+/* CTA box -> back to the converter */
+.cta-box{display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:space-between; background:var(--surface); border:1px solid var(--border-2); border-radius:16px; padding:16px 18px; margin:26px 0 8px}
+.cta-box .t{font-family:var(--disp); font-weight:600; font-size:15.5px}
+.cta-box .t span{color:var(--muted); font-weight:400; font-size:13.5px; display:block; margin-top:2px; font-family:var(--sans)}
+.btn{display:inline-flex; align-items:center; gap:8px; height:44px; padding:0 18px; border-radius:12px; border:0; background:linear-gradient(180deg,var(--accent-2),var(--accent)); color:#fff; font-family:var(--disp); font-weight:600; font-size:14.5px; text-decoration:none; cursor:pointer}
+.btn svg{width:17px;height:17px}
+
+/* FAQ */
+.faq{margin:6px 0 2px}
+.faq details{border:1px solid var(--border); border-radius:12px; background:var(--surface); margin-bottom:10px; padding:0 16px}
+.faq summary{cursor:pointer; list-style:none; font-family:var(--disp); font-weight:600; font-size:15px; padding:14px 0; display:flex; justify-content:space-between; align-items:center; gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+'; color:var(--accent); font-size:20px; line-height:1}
+.faq details[open] summary::after{content:'–'}
+.faq details[open] summary{border-bottom:1px solid var(--border)}
+.faq .ans{padding:12px 0 16px; color:var(--muted); font-size:14.5px}
+
+/* reserved ad slot (same non-"ad" class as the app, so blockers don't collapse it) */
+.promo-area{max-width:720px; margin:26px auto 0; padding:0 22px}
+.promo-unit{position:relative; border:1px solid var(--border); border-radius:12px; background:var(--surface); min-height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; color:var(--faint)}
+.promo-unit .tag{position:absolute; top:8px; left:11px; font-size:9px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; opacity:.5}
+.promo-unit .ph{font-size:12px; opacity:.65}
+
+/* citation examples (writing guides) */
+.cite{background:var(--surface); border:1px solid var(--border-2); border-left:3px solid var(--accent); border-radius:12px; padding:13px 15px; margin:0 0 12px}
+.cite .style{font-family:var(--disp); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:7px}
+.cite .ref{font-size:14.5px; line-height:1.55; padding-left:1.5em; text-indent:-1.5em}
+.cite .ref em{font-style:italic}
+.cite .it{font-size:12.5px; color:var(--muted); margin-top:8px}
+.cite .it code{font-family:var(--disp); background:var(--surface-2); padding:1px 6px; border-radius:5px}
+
+/* footer */
+footer{margin-top:30px}
+.footcol{max-width:720px; margin:0 auto; padding:22px; border-top:1px solid var(--border)}
+.footlinks{display:flex; flex-wrap:wrap; gap:8px 18px; margin-bottom:12px}
+.footlinks a{color:var(--muted); text-decoration:none; font-size:13.5px}
+.footlinks a:hover{color:var(--accent)}
+.footnote{font-size:12.5px; color:var(--faint); line-height:1.55}

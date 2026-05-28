@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# vercel
+.vercel/
+
+# secrets — NEVER commit real keys (set them in the Vercel dashboard instead)
+.env
+.env.local
+.env.*.local
+
+# python cache (from the dev/ test scripts)
+__pycache__/
+*.pyc
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

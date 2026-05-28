@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>itconverts — graphing calculator</title>
+<meta name="description" content="A free virtual scientific and graphing calculator for students.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0b0a; --text:#f7f3ec; --muted:#a39a8c;
+  --device:#1a1714; --device-2:#221d18; --bezel:#0c0b0a;
+  --screen:#15110b; --screen-line:#2c2418; --phos:#ff7a55; --phos-dim:#9c8b78;
+  --key:#221d18; --key-2:#2a241e; --key-text:#f0e9df; --key-edge:#3a322a;
+  --fn:#1a1714; --fn-text:#b8ab9a;
+  --accent:#ff5c38; --accent-2:#ff7a55;
+  --equals:#ff5c38; --equals-2:#e2421e;
+  --mono:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --sans:"Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#f6f2ea; --text:#1a1611; --muted:#6f6457;
+  --device:#efe9dd; --device-2:#fffdf9; --bezel:#d8ccb9;
+  --screen:#fbf4e8; --screen-line:#e6d8c2; --phos:#c4361a; --phos-dim:#9a8d7c;
+  --key:#ffffff; --key-2:#f3ede2; --key-text:#1a1611; --key-edge:#e0d5c4;
+  --fn:#efe9dd; --fn-text:#6f6457;
+  --accent:#e2421e; --accent-2:#c4361a;
+  --equals:#e2421e; --equals-2:#c4361a;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+html{height:100%}
+body{height:100%; min-height:100dvh; background:var(--bg); color:var(--text); font-family:var(--sans);
+  display:flex; flex-direction:column; align-items:center; overflow:hidden auto;
+  padding:10px 10px max(10px,env(safe-area-inset-bottom)); -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%}
+
+.topbar{width:100%; max-width:420px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:2px 2px 8px}
+.brand{display:flex; align-items:center; gap:8px; font-weight:700; letter-spacing:-.01em; font-size:15px}
+.brand .b{width:24px;height:24px;border-radius:7px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.brand span{color:var(--accent)}
+.tbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--key-edge);background:var(--device-2);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.tbtn svg{width:16px;height:16px}
+
+/* device fills remaining height */
+.device{flex:1; min-height:0; width:100%; max-width:420px;
+  background:linear-gradient(180deg,var(--device-2),var(--device)); border:1px solid var(--bezel);
+  border-radius:22px; padding:12px; display:flex; flex-direction:column; gap:10px;
+  box-shadow:0 22px 50px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05)}
+.deck{flex:none; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:0 4px}
+.deck .name{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase; white-space:nowrap}
+.tabs{display:flex; gap:3px; background:var(--bezel); border-radius:9px; padding:3px}
+.tab{font-size:12px; font-weight:600; border:0; background:none; color:var(--muted); padding:5px 13px; border-radius:7px; cursor:pointer; font-family:var(--sans)}
+.tab.on{background:var(--key); color:var(--text)}
+.modebadge{font-family:var(--mono); font-size:10.5px; font-weight:600; color:var(--phos-dim); border:1px solid var(--screen-line); border-radius:6px; padding:4px 8px; cursor:pointer; background:var(--bezel); white-space:nowrap}
+
+/* calc screen */
+.screen{flex:none; background:var(--screen); border:1px solid var(--bezel); border-radius:12px; box-shadow:inset 0 2px 8px rgba(0,0,0,.4); padding:10px 14px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; min-height:72px}
+.histbox{font-family:var(--mono); color:var(--phos-dim); font-size:12px; line-height:1.6; max-height:46px; overflow-y:auto; text-align:right; opacity:.85}
+.histbox .h .e{opacity:.7} .histbox .h .r{color:var(--phos)}
+.entry{font-family:var(--mono); color:var(--phos); font-size:clamp(20px,6vw,27px); font-weight:600; text-align:right; word-break:break-all; margin-top:6px; min-height:30px; font-variant-numeric:tabular-nums; text-shadow:0 0 14px rgba(255,122,85,.22)}
+html[data-theme="light"] .entry{text-shadow:none}
+.result{font-family:var(--mono); color:var(--phos-dim); font-size:14px; text-align:right; min-height:18px; margin-top:3px; font-variant-numeric:tabular-nums}
+.result.err{color:#ff7a6b}
+.cursor{display:inline-block; width:2px; height:1em; background:var(--phos); margin-left:1px; vertical-align:-2px; animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+
+/* keypad fills remaining height */
+.pad{flex:1; min-height:0; display:grid; grid-template-columns:repeat(5,1fr); grid-auto-rows:1fr; gap:7px}
+.key{border:1px solid var(--key-edge); background:linear-gradient(180deg,var(--key-2),var(--key)); color:var(--key-text); border-radius:12px; font-family:var(--mono); font-size:clamp(14px,4.2vw,17px); font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; user-select:none; transition:transform .05s, filter .1s; min-height:30px}
+.key:active{transform:translateY(1px); filter:brightness(1.15)}
+.key.fn{background:var(--fn); color:var(--fn-text); font-size:clamp(12px,3.5vw,14px)}
+.key.op{color:var(--accent); font-size:clamp(16px,4.8vw,20px)}
+.key.warn{color:#ff8a7a}
+.key.acc{background:linear-gradient(180deg,var(--accent),var(--accent-2)); color:#fff; border-color:transparent}
+.key.eq{background:linear-gradient(180deg,var(--equals),var(--equals-2)); color:#fff; border-color:transparent; font-size:clamp(18px,5.4vw,23px)}
+.key.second-on{background:linear-gradient(180deg,var(--accent),var(--accent-2)); color:#fff; border-color:transparent}
+
+/* graph */
+.graphwrap{flex:1; min-height:0; display:none; flex-direction:column; gap:8px}
+.graphwrap.on{display:flex}
+.gscreen{flex:1; min-height:150px; background:var(--screen); border:1px solid var(--bezel); border-radius:12px; box-shadow:inset 0 2px 8px rgba(0,0,0,.4); padding:6px; position:relative}
+canvas#plot{width:100%; height:100%; display:block; border-radius:6px; touch-action:none}
+.yrow{flex:none; display:flex; gap:8px; align-items:center}
+.ytag{font-family:var(--mono); color:var(--accent); font-weight:600; font-size:15px}
+.yinput{flex:1; min-width:0; font-family:var(--mono); font-size:15px; background:var(--bezel); border:1px solid var(--key-edge); color:var(--text); border-radius:9px; height:40px; padding:0 12px}
+.yinput:focus{outline:2px solid var(--accent); border-color:transparent}
+.gtools{flex:none; display:flex; gap:6px}
+.gtool{flex:1; font-size:12px; font-weight:600; font-family:var(--sans); border:1px solid var(--key-edge); background:var(--key); color:var(--key-text); border-radius:9px; height:34px; cursor:pointer}
+.gtool:hover{border-color:var(--accent)}
+.gtool.primary{background:var(--accent); color:#fff; border-color:transparent; flex:1.3}
+.qrow{flex:none; display:grid; grid-template-columns:repeat(6,1fr); gap:6px}
+.qkey{font-family:var(--mono); font-size:13px; font-weight:600; border:1px solid var(--key-edge); background:var(--fn); color:var(--fn-text); border-radius:9px; height:36px; cursor:pointer}
+.qkey:active{filter:brightness(1.15)}
+.qkey.x{background:linear-gradient(180deg,var(--accent),var(--accent-2)); color:#fff; border-color:transparent}
+
+@media (max-width:380px){ body{padding:8px 7px} .device{padding:10px; border-radius:18px; gap:8px} .pad{gap:6px} }
+@media (max-height:560px){
+  .screen{min-height:58px; padding:8px 12px}
+  .entry{font-size:clamp(18px,5vw,22px); min-height:24px}
+  .histbox{max-height:30px}
+  .result{min-height:15px; font-size:13px}
+  .key{min-height:24px; border-radius:10px}
+  .device{gap:7px; padding:10px}
+  .pad{gap:5px}
+  .gscreen{min-height:84px}
+  .yinput{height:34px}
+  .gtool{height:29px}
+  .graphwrap{gap:6px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><span class="b">⇄</span> it<span>converts</span></div>
+  <button class="tbtn" id="theme" aria-label="Toggle theme"></button>
+</div>
+
+<div class="device">
+  <div class="deck">
+    <div class="name">graphing calc</div>
+    <div class="tabs"><button class="tab on" data-tab="calc">Calc</button><button class="tab" data-tab="graph">Graph</button></div>
+    <button class="modebadge" id="mode" title="Toggle degrees / radians">DEG</button>
+  </div>
+
+  <div class="screen" id="calcscreen">
+    <div class="histbox" id="hist"></div>
+    <div class="entry" id="entry"><span class="cursor"></span></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <div class="graphwrap" id="graphwrap">
+    <div class="gscreen"><canvas id="plot"></canvas></div>
+    <div class="yrow"><span class="ytag">y =</span><input class="yinput" id="yinput" type="text" inputmode="text" placeholder="sin(x) · x^2-3 · 2x+1" spellcheck="false"></div>
+    <div class="gtools">
+      <button class="gtool primary" id="gplot">Plot</button>
+      <button class="gtool" id="zin">Zoom +</button>
+      <button class="gtool" id="zout">Zoom −</button>
+      <button class="gtool" id="greset">Reset</button>
+    </div>
+  </div>
+
+  <div class="pad" id="pad"></div>
+</div>
+
+<script src="mathcore.js"></script>
+<script src="supporter.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $=function(s){return document.querySelector(s);};
+  var entryEl=$('#entry'), resultEl=$('#result'), histEl=$('#hist');
+  var state={ expr:'', ans:0, deg:true, second:false, tab:'calc', hist:[] };
+
+  /* theme */
+  var sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>';
+  var moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8 8 0 1 1 11.2 3a6.2 6.2 0 0 0 9.8 9.8z"/></svg>';
+  function applyTheme(t){document.documentElement.setAttribute('data-theme',t); $('#theme').innerHTML=(t==='dark'?sun:moon); try{localStorage.setItem('itc-calc-theme',t);}catch(e){} if(state.tab==='graph') drawGraph();}
+  var sv; try{sv=localStorage.getItem('itc-calc-theme');}catch(e){}
+  applyTheme(sv||'dark');
+  $('#theme').addEventListener('click',function(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');});
+
+  function K(label,opts){opts=opts||{}; opts.label=label; return opts;}
+  var KEYS=[
+    K('2nd',{cls:'fn',act:'second'}), K('π',{cls:'fn',ins:'pi'}), K('e',{cls:'fn',ins:'e'}), K('(',{cls:'fn',ins:'('}), K(')',{cls:'fn',ins:')'}),
+    K('sin',{cls:'fn',ins:'sin(',alt:'sin⁻¹',altins:'asin('}), K('cos',{cls:'fn',ins:'cos(',alt:'cos⁻¹',altins:'acos('}), K('tan',{cls:'fn',ins:'tan(',alt:'tan⁻¹',altins:'atan('}), K('xʸ',{cls:'fn',ins:'^'}), K('√',{cls:'fn',ins:'sqrt(',alt:'∛',altins:'cbrt('}),
+    K('ln',{cls:'fn',ins:'ln(',alt:'eˣ',altins:'exp('}), K('log',{cls:'fn',ins:'log(',alt:'10ˣ',altins:'10^'}), K('x²',{cls:'fn',ins:'^2'}), K('!',{cls:'fn',ins:'!'}), K('%',{cls:'fn',ins:'%'}),
+    K('7',{ins:'7'}), K('8',{ins:'8'}), K('9',{ins:'9'}), K('DEL',{cls:'op warn',act:'del'}), K('AC',{cls:'op warn',act:'clear'}),
+    K('4',{ins:'4'}), K('5',{ins:'5'}), K('6',{ins:'6'}), K('×',{cls:'op',ins:'×'}), K('÷',{cls:'op',ins:'÷'}),
+    K('1',{ins:'1'}), K('2',{ins:'2'}), K('3',{ins:'3'}), K('+',{cls:'op',ins:'+'}), K('−',{cls:'op',ins:'-'}),
+    K('0',{ins:'0'}), K('.',{ins:'.'}), K('(-)',{cls:'fn',ins:'-'}), K('ans',{cls:'fn',ins:'ans',vary:true}), K('=',{cls:'eq',act:'equals'})
+  ];
+  var pad=$('#pad'), keyEls=[];
+  KEYS.forEach(function(k){
+    var b=document.createElement('button'); b.className='key '+(k.cls||''); b.type='button';
+    b.textContent=k.label; b.dataset.label=k.label; keyEls.push({el:b,k:k});
+    b.addEventListener('click',function(){press(k);});
+    pad.appendChild(b);
+  });
+
+  /* insert into the y= field at the caret */
+  function insertGraph(t){ var yi=$('#yinput'); var s=yi.selectionStart; if(s==null) s=yi.value.length; var e=yi.selectionEnd; if(e==null) e=s;
+    yi.value=yi.value.slice(0,s)+t+yi.value.slice(e); yi.focus(); var p=s+t.length; try{yi.setSelectionRange(p,p);}catch(err){} drawGraph(); }
+  function notifyMode(){ try{ if(window.parent&&window.parent!==window) window.parent.postMessage({type:'itc-calc-mode', mode:state.tab}, '*'); }catch(e){} }
+
+  function refreshSecondLabels(){ keyEls.forEach(function(o){ var k=o.k; if(k.alt){ o.el.textContent=state.second?k.alt:k.label; } if(k.act==='second'){ o.el.classList.toggle('second-on',state.second); } }); }
+  function setModeKeys(g){ keyEls.forEach(function(o){ if(o.k.vary){ o.el.textContent=g?'x':'ans'; o.el.classList.toggle('acc',g); } }); }
+
+  function insert(txt){ if(state.tab==='graph'){ insertGraph(txt); } else { state.expr+=txt; renderCalc(); } }
+  function press(k){
+    if(k.act==='second'){ state.second=!state.second; refreshSecondLabels(); return; }
+    if(k.act==='del'){ if(state.tab==='graph'){ var y=$('#yinput'); y.value=y.value.slice(0,-1); drawGraph(); } else { state.expr=state.expr.slice(0,-1); renderCalc(); } return; }
+    if(k.act==='clear'){ if(state.tab==='graph'){ $('#yinput').value=''; drawGraph(); } else { state.expr=''; resultEl.textContent=''; resultEl.className='result'; renderCalc(); } return; }
+    if(k.act==='equals'){ if(state.tab==='graph'){ doPlot(); } else { evaluate(); } if(state.second){state.second=false; refreshSecondLabels();} return; }
+    if(k.vary){ insert(state.tab==='graph'?'x':'ans'); return; }
+    var t=(state.second&&k.altins)?k.altins:k.ins;
+    if(t!=null){ insert(t); if(state.second){state.second=false; refreshSecondLabels();} }
+  }
+
+  function renderCalc(){
+    var html=state.expr.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    entryEl.innerHTML=(html||'')+'<span class="cursor"></span>';
+    if(state.expr.trim()){ try{ var v=MATH.evaluate(state.expr,{deg:state.deg,ans:state.ans}); resultEl.textContent='= '+fmt(v); resultEl.className='result'; }catch(e){ resultEl.textContent=''; resultEl.className='result'; } }
+    else { resultEl.textContent=''; }
+  }
+  function evaluate(){
+    if(!state.expr.trim()) return;
+    try{ var v=MATH.evaluate(state.expr,{deg:state.deg,ans:state.ans}); state.ans=v;
+      var exprStr=state.expr;
+      state.hist.push({e:state.expr,r:fmt(v)}); if(state.hist.length>20) state.hist.shift(); renderHist();
+      resultEl.textContent='= '+fmt(v); resultEl.className='result';
+      if(window.ITC_USER) ITC_USER.log({t:'calc', label:exprStr+' = '+fmt(v), detail:'Calculator'});
+      state.expr=String(v); entryEl.innerHTML=fmt(v)+'<span class="cursor"></span>';
+    }catch(err){ resultEl.textContent=err.message||'Error'; resultEl.className='result err'; }
+  }
+  function renderHist(){ histEl.innerHTML=''; state.hist.slice(-5).forEach(function(h){ var d=document.createElement('div'); d.className='h'; d.innerHTML='<span class="e">'+escapeHtml(h.e)+' =</span> <span class="r">'+h.r+'</span>'; histEl.appendChild(d); }); histEl.scrollTop=histEl.scrollHeight; }
+  function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function fmt(v){ if(!isFinite(v)) return v>0?'∞':'-∞'; if(v===0) return '0';
+    var a=Math.abs(v); if(a<1e-7||a>=1e12) return v.toExponential(7).replace(/\.?0+e/,'e');
+    var r=parseFloat(v.toPrecision(12)); var s=r.toString(); if(s.indexOf('e')!==-1) return s;
+    var parts=s.split('.'); parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,','); return parts.join('.'); }
+
+  $('#mode').addEventListener('click',function(){state.deg=!state.deg; this.textContent=state.deg?'DEG':'RAD'; renderCalc(); if(state.tab==='graph') drawGraph();});
+
+  /* tabs */
+  var calcScreen=$('#calcscreen'), graphwrap=$('#graphwrap');
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      state.tab=t.dataset.tab; var g=state.tab==='graph';
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===t);});
+      calcScreen.style.display=g?'none':'flex';
+      graphwrap.classList.toggle('on',g);
+      setModeKeys(g);
+      notifyMode();
+      if(g){ setTimeout(function(){sizeCanvas(); drawGraph();},260); }
+    });
+  });
+
+  /* graph */
+  var canvas=$('#plot'), ctx=canvas.getContext('2d');
+  var win={xmin:-10,xmax:10,ymin:-7,ymax:7};
+  var dpr=window.devicePixelRatio||1;
+  function sizeCanvas(){ var r=canvas.getBoundingClientRect(); if(r.width<5) return; canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr); }
+  function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+  function drawGraph(){
+    if(!canvas.width||canvas.width<5){ sizeCanvas(); if(!canvas.width) return; }
+    var W=canvas.width, H=canvas.height;
+    var screenBg=css('--screen'), line=css('--screen-line'), axis=css('--phos-dim'), fn=css('--accent'), text=css('--muted');
+    ctx.clearRect(0,0,W,H); ctx.fillStyle=screenBg; ctx.fillRect(0,0,W,H);
+    var x2px=function(x){return (x-win.xmin)/(win.xmax-win.xmin)*W;};
+    var y2px=function(y){return H-(y-win.ymin)/(win.ymax-win.ymin)*H;};
+    ctx.lineWidth=1*dpr; ctx.strokeStyle=line; ctx.beginPath();
+    var stepX=niceStep((win.xmax-win.xmin)/10), stepY=niceStep((win.ymax-win.ymin)/8);
+    for(var gx=Math.ceil(win.xmin/stepX)*stepX; gx<=win.xmax; gx+=stepX){var px=x2px(gx); ctx.moveTo(px,0); ctx.lineTo(px,H);}
+    for(var gy=Math.ceil(win.ymin/stepY)*stepY; gy<=win.ymax; gy+=stepY){var py=y2px(gy); ctx.moveTo(0,py); ctx.lineTo(W,py);}
+    ctx.stroke();
+    ctx.lineWidth=1.6*dpr; ctx.strokeStyle=axis; ctx.beginPath();
+    ctx.moveTo(0,y2px(0)); ctx.lineTo(W,y2px(0)); ctx.moveTo(x2px(0),0); ctx.lineTo(x2px(0),H); ctx.stroke();
+    ctx.fillStyle=text; ctx.font=(10*dpr)+'px "IBM Plex Mono",monospace'; ctx.textAlign='left';
+    ctx.fillText(fmtAxis(win.xmax), W-28*dpr, y2px(0)-5*dpr); ctx.fillText(fmtAxis(win.ymax), x2px(0)+5*dpr, 13*dpr);
+    var expr=$('#yinput').value.trim(); if(!expr) return;
+    ctx.lineWidth=2.2*dpr; ctx.strokeStyle=fn; ctx.beginPath();
+    var prevValid=false, lastY=0;
+    for(var px2=0; px2<=W; px2+=Math.max(1,dpr)){
+      var x=win.xmin+(px2/W)*(win.xmax-win.xmin); var y;
+      try{ y=MATH.evaluate(expr,{deg:state.deg,vars:{x:x},ans:state.ans}); }catch(e){ prevValid=false; continue; }
+      if(!isFinite(y)){ prevValid=false; continue; }
+      var py=y2px(y);
+      if(prevValid && Math.abs(py-lastY) < H*1.5){ ctx.lineTo(px2,py); } else { ctx.moveTo(px2,py); }
+      prevValid=true; lastY=py;
+    }
+    ctx.stroke();
+  }
+  function niceStep(raw){var p=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10)); var f=raw/p; var nf=f<1.5?1:(f<3?2:(f<7?5:10)); return nf*p;}
+  function fmtAxis(v){return Math.abs(v)>=1000?v.toExponential(0):(''+Math.round(v*100)/100);}
+  function doPlot(){ sizeCanvas(); drawGraph(); }
+  $('#gplot').addEventListener('click',doPlot);
+  $('#yinput').addEventListener('keydown',function(e){if(e.key==='Enter'){doPlot();}});
+  $('#yinput').addEventListener('input',function(){drawGraph();});
+  function zoom(f){var cx=(win.xmin+win.xmax)/2, cy=(win.ymin+win.ymax)/2; var hw=(win.xmax-win.xmin)/2*f, hh=(win.ymax-win.ymin)/2*f; win.xmin=cx-hw; win.xmax=cx+hw; win.ymin=cy-hh; win.ymax=cy+hh; drawGraph();}
+  $('#zin').addEventListener('click',function(){zoom(0.7);});
+  $('#zout').addEventListener('click',function(){zoom(1.4);});
+  $('#greset').addEventListener('click',function(){win={xmin:-10,xmax:10,ymin:-7,ymax:7}; drawGraph();});
+  var drag=null;
+  canvas.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY}; canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',function(e){ if(!drag) return; var r=canvas.getBoundingClientRect(); var dx=(e.clientX-drag.x)/r.width*(win.xmax-win.xmin); var dy=(e.clientY-drag.y)/r.height*(win.ymax-win.ymin); win.xmin-=dx; win.xmax-=dx; win.ymin+=dy; win.ymax+=dy; drag={x:e.clientX,y:e.clientY}; drawGraph(); });
+  canvas.addEventListener('pointerup',function(){drag=null;});
+  canvas.addEventListener('wheel',function(e){e.preventDefault(); zoom(e.deltaY>0?1.12:0.89);},{passive:false});
+  window.addEventListener('resize',function(){ if(state.tab==='graph'){ sizeCanvas(); drawGraph(); } });
+
+  /* physical keyboard (calc mode) */
+  document.addEventListener('keydown',function(e){
+    if(state.tab==='graph') return;
+    var k=e.key;
+    if(/^[0-9.]$/.test(k)){ insert(k); e.preventDefault(); return; }
+    if(k==='+'||k==='-'){ insert(k); e.preventDefault(); return; }
+    if(k==='*'){ insert('×'); e.preventDefault(); return; }
+    if(k==='/'){ insert('÷'); e.preventDefault(); return; }
+    if(k==='^'||k==='('||k===')'||k==='!'||k==='%'){ insert(k); e.preventDefault(); return; }
+    if(k==='Enter'||k==='='){ evaluate(); e.preventDefault(); return; }
+    if(k==='Backspace'){ state.expr=state.expr.slice(0,-1); renderCalc(); e.preventDefault(); return; }
+    if(k==='Escape'){ state.expr=''; resultEl.textContent=''; resultEl.className='result'; renderCalc(); return; }
+  });
+
+  refreshSecondLabels(); setModeKeys(false); renderCalc(); notifyMode();
+})();
+</script>
+</body>
+</html>

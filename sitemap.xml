@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://itconverts.example/index.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/about.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/privacy.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/terms.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/contact.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/km-to-miles.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/celsius-to-fahrenheit.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/kg-to-pounds.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/meters-to-feet.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/inches-to-centimeters.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/liters-to-gallons.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/grams-to-ounces.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/data-storage-units-explained.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/guides/cups-to-milliliters.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/citation-styles-explained.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-cite-a-website.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-cite-wikipedia.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-cite-a-book.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-cite-a-journal-article.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/bibliography-vs-works-cited-vs-references.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-write-a-thesis-statement.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-structure-a-research-paper.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-avoid-plagiarism.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://itconverts.example/writing/how-to-evaluate-sources.html</loc><changefreq>monthly</changefreq></url>
+</urlset>

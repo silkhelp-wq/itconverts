@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>itconverts — just type it</title>
+<meta name="description" content="Type any conversion in plain language — 100 km to miles, 350 F to C, 2 GB to MB.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     MONETIZATION CONFIG  — paste your own IDs here, then deploy.
+     Leave a field empty to keep that feature in "placeholder" mode.
+     See MONETIZATION.md for where each value comes from.
+     ============================================================ -->
+<script>
+  window.ITC_CONFIG = {
+    ADSENSE_CLIENT: "",          // e.g. "ca-pub-0000000000000000"  (from AdSense, once approved)
+    ADSENSE_SLOT:   "",          // e.g. "1234567890"               (an ad unit's slot id)
+    API_BASE:       ""           // e.g. "https://itconverts.com/api" or "/api" (your Stripe serverless base)
+  };
+</script>
+<style>
+/* ---------- Direction C · Bold, search-first ---------- */
+:root{
+  --bg:#0c0b0a; --bg-2:#15130f; --surface:#1a1714; --surface-2:#221d18;
+  --text:#f7f3ec; --muted:#a39a8c; --faint:#6f675b;
+  --border:#2a2520; --border-2:#3a322a;
+  --accent:#ff5c38; --accent-2:#ff7a55; --accent-ink:#ffb59f; --accent-soft:#2a160f;
+  --disp:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --sans:"Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#f6f2ea; --bg-2:#efe9dd; --surface:#ffffff; --surface-2:#f3ede2;
+  --text:#1a1611; --muted:#6f6457; --faint:#9a8d7c;
+  --border:#e6ddcf; --border-2:#d8ccb9;
+  --accent:#e2421e; --accent-2:#c4361a; --accent-ink:#9c2c12; --accent-soft:#fbe6df;
+}
+*{box-sizing:border-box}
+html,body{margin:0; min-height:100%}
+body{background:radial-gradient(120% 80% at 50% -10%, var(--bg-2), var(--bg) 60%); color:var(--text); font-family:var(--sans); font-size:16px; -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%; min-height:100vh; display:flex; flex-direction:column}
+button,input,select{font-family:inherit}
+.wrap{width:100%; max-width:660px; margin:0 auto; padding:0 22px}
+
+header{display:flex; align-items:center; justify-content:space-between; padding:16px 0}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--disp); font-weight:700; font-size:20px; letter-spacing:-.02em; background:none; border:0; color:inherit; cursor:pointer}
+.brand .b{width:30px; height:30px; border-radius:9px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; transform:rotate(0); transition:transform .4s}
+.brand:hover .b{transform:rotate(180deg)}
+.brand em{font-style:normal; color:var(--accent)}
+.tbtn{width:38px; height:38px; border-radius:11px; border:1px solid var(--border-2); background:var(--surface); color:var(--text); cursor:pointer; display:inline-flex; align-items:center; justify-content:center}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn svg{width:18px;height:18px}
+.calcbtn{display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 14px; border-radius:11px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent); font-family:var(--disp); font-weight:600; font-size:13.5px; cursor:pointer; white-space:nowrap; animation:calcnudge 2.6s ease 1.2s 3}
+.calcbtn:hover{background:var(--accent); color:#fff; border-color:transparent}
+.calcbtn svg{width:17px; height:17px}
+@keyframes calcnudge{0%,100%{box-shadow:0 0 0 0 transparent}45%{box-shadow:0 0 0 5px var(--accent-soft)}}
+@media (max-width:430px){.calcbtn .lbl{display:none} .calcbtn{padding:0 11px}}
+
+main{flex:1; display:flex; flex-direction:column; justify-content:center; padding:8px 0 30px}
+.kick{font-family:var(--disp); font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:10px}
+.lead{font-family:var(--disp); font-size:clamp(25px,3.6vw,38px); line-height:1.04; letter-spacing:-.03em; font-weight:700; margin:0 0 18px}
+.lead .hl{color:var(--accent)}
+
+.cmd{position:relative}
+.cmd input{width:100%; height:56px; font-family:var(--disp); font-size:clamp(16px,2vw,19px); font-weight:500; color:var(--text); background:var(--surface); border:1.5px solid var(--border-2); border-radius:14px; padding:0 54px 0 20px; box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.cmd input::placeholder{color:var(--faint)}
+.cmd input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft)}
+.cmd .ent{position:absolute; right:9px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:11px; background:var(--accent); color:#fff; border:0; cursor:pointer; display:flex; align-items:center; justify-content:center}
+.cmd .ent svg{width:18px;height:18px}
+.parsehint{min-height:20px; margin:10px 4px 0; font-size:13px; color:var(--faint)}
+.parsehint.err{color:var(--accent-ink)}
+
+/* result */
+.result{margin-top:16px; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:20px 22px; opacity:1; box-shadow:0 10px 34px rgba(0,0,0,.16)}
+.rtop{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+.rtop .pill{display:inline-flex; align-items:center; gap:8px; font-family:var(--disp); font-size:13px; font-weight:600; color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:7px 13px}
+.rtop .pill svg{width:15px;height:15px}
+.editrow{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.editrow .seg{display:flex; align-items:center; gap:10px; background:var(--surface-2); border:1px solid var(--border-2); border-radius:14px; padding:8px 10px}
+.editrow input.v{width:90px; border:0; background:transparent; color:var(--text); font-family:var(--disp); font-size:18px; font-weight:600}
+.editrow input.v:focus{outline:none}
+.dd{position:relative}
+.dd-btn{display:flex; align-items:center; gap:7px; border:0; background:transparent; color:var(--text); font-family:var(--disp); font-size:15px; font-weight:600; cursor:pointer; padding:0}
+.dd-btn .chev{width:13px; height:13px; color:var(--muted); transition:transform .18s; flex:none; display:flex}
+.dd.open .dd-btn .chev{transform:rotate(180deg)}
+.dd-list{position:absolute; top:calc(100% + 9px); min-width:210px; max-height:300px; overflow-y:auto; background:var(--surface); border:1px solid var(--border-2); border-radius:14px; box-shadow:0 18px 44px rgba(0,0,0,.45); padding:6px; z-index:60; display:none}
+.dd.open .dd-list{display:block}
+.dd-opt{padding:10px 12px; border-radius:9px; font-family:var(--sans); font-size:14px; font-weight:500; color:var(--text); cursor:pointer; white-space:nowrap}
+.dd-opt:hover{background:var(--surface-2)}
+.dd-opt.sel{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.dd-list::-webkit-scrollbar{width:10px}
+.dd-list::-webkit-scrollbar-thumb{background:var(--border-2); border-radius:6px; border:2px solid var(--surface)}
+.dd-list::-webkit-scrollbar-track{background:transparent}
+.swap{width:42px;height:42px;border-radius:50%;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .3s}
+.swap:hover{border-color:var(--accent)} .swap.s{transform:rotate(180deg)}
+.swap svg{width:18px;height:18px}
+.big{font-family:var(--disp); font-weight:700; letter-spacing:-.03em; line-height:1; margin:16px 0 6px; font-size:clamp(30px,5vw,52px); word-break:break-word}
+.big .u{font-size:.36em; font-weight:600; color:var(--muted); letter-spacing:-.01em; margin-left:.15em}
+.rbar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px}
+.eq{font-size:14.5px; color:var(--muted)}
+.copy{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-size:14px;font-weight:600;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text);border-radius:12px;padding:10px 16px;cursor:pointer}
+.copy:hover{border-color:var(--accent);color:var(--accent)} .copy svg{width:16px;height:16px}
+
+/* browse pills */
+.browse{margin-top:24px}
+.cpill.active{border-color:var(--accent); background:var(--accent-soft); color:var(--accent)}
+.cpill.active svg{color:var(--accent)}
+.browse .lbl{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); font-weight:600; margin-bottom:14px; font-family:var(--disp)}
+.pills{display:flex; flex-wrap:wrap; gap:10px}
+.cpill{display:inline-flex; align-items:center; gap:9px; font-family:var(--disp); font-size:14.5px; font-weight:500; border:1px solid var(--border-2); background:var(--surface); color:var(--text); border-radius:13px; padding:11px 15px; cursor:pointer; transition:transform .12s, border-color .12s}
+.cpill:hover{transform:translateY(-2px); border-color:var(--accent)}
+.cpill svg{width:17px;height:17px; color:var(--accent)}
+
+/* AI study helper */
+.ask{margin-top:14px; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:20px 22px; box-shadow:0 10px 34px rgba(0,0,0,.14)}
+.ask-top{display:flex; gap:12px; align-items:flex-start; margin-bottom:14px}
+.ai-chip{flex:none; font-family:var(--disp); font-size:11px; font-weight:700; letter-spacing:.06em; color:#fff; background:linear-gradient(180deg,var(--accent-2),var(--accent)); border-radius:8px; padding:5px 9px; margin-top:2px}
+.ask-top h2{font-family:var(--disp); font-size:17px; font-weight:700; letter-spacing:-.01em; margin:0}
+.ask-top p{margin:3px 0 0; font-size:12.5px; color:var(--muted); line-height:1.5}
+.ask-bar{display:flex; gap:10px}
+.ask-bar input{flex:1; min-width:0; height:50px; border:1.5px solid var(--border-2); background:var(--surface-2); border-radius:12px; padding:0 16px; font-size:15px; color:var(--text); font-family:var(--sans)}
+.ask-bar input::placeholder{color:var(--faint)}
+.ask-bar input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft)}
+.ask-bar button{flex:none; width:50px; height:50px; border-radius:12px; background:var(--accent); color:#fff; border:0; cursor:pointer; display:flex; align-items:center; justify-content:center}
+.ask-bar button:disabled{opacity:.55; cursor:default}
+.ask-bar button svg{width:20px; height:20px}
+.ask-out{margin-top:16px; transition:opacity .2s ease}
+.ask-loading{display:flex; align-items:center; gap:10px; color:var(--muted); font-size:14px}
+.spin{width:16px; height:16px; border:2px solid var(--border-2); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ans-text{font-size:15px; line-height:1.62; color:var(--text)}
+.ans-text p{margin:0 0 10px} .ans-text p:last-child{margin-bottom:0}
+.sources-l{margin:16px 0 8px; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700; font-family:var(--disp)}
+.sources{display:flex; flex-direction:column; gap:8px}
+.src{display:flex; align-items:center; gap:11px; padding:11px 13px; border:1px solid var(--border); border-radius:11px; background:var(--surface-2); text-decoration:none; color:var(--text)}
+.src:hover{border-color:var(--accent)}
+.src .site{flex:none; font-size:11.5px; font-weight:700; color:var(--accent); font-family:var(--disp); min-width:84px}
+.src .t{flex:1; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.src .go{flex:none; color:var(--faint); font-size:13px}
+.refusal{font-size:14.5px; color:var(--muted); line-height:1.55; background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:13px 15px}
+.ai-note{margin-top:14px; font-size:11.5px; color:var(--faint)}
+/* ---- Study search additions ---- */
+.study-chip{flex:none; display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:9px; color:#fff; background:linear-gradient(180deg,var(--accent-2),var(--accent))}
+.study-chip svg{width:18px; height:18px}
+.ask-head{flex:1; min-width:0}
+.lang-sel{flex:none; align-self:flex-start; height:34px; max-width:128px; border:1.5px solid var(--border-2); background:var(--surface-2); color:var(--text); border-radius:10px; padding:0 10px; font-family:var(--sans); font-size:13px; cursor:pointer}
+.lang-sel:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft)}
+.ask-tools{margin-top:11px; display:flex; gap:9px}
+.savedbtn{display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 12px; border-radius:10px; border:1px solid var(--border-2); background:var(--surface-2); color:var(--muted); font-family:var(--sans); font-weight:600; font-size:12.5px; cursor:pointer}
+.savedbtn:hover{border-color:var(--accent); color:var(--accent)}
+.savedbtn svg{width:14px; height:14px}
+.results{display:flex; flex-direction:column; gap:10px}
+.result{display:flex; gap:12px; padding:12px 13px; border:1px solid var(--border); border-radius:12px; background:var(--surface-2)}
+.result .thumb{flex:none; width:54px; height:54px; border-radius:9px; object-fit:cover; background:var(--surface); border:1px solid var(--border)}
+.result .rbody{flex:1; min-width:0}
+.result .rtitle{font-family:var(--disp); font-weight:600; font-size:15px; color:var(--text); text-decoration:none; display:inline-block}
+.result .rtitle:hover{color:var(--accent)}
+.result .rsnip{font-size:12.5px; color:var(--muted); line-height:1.45; margin-top:3px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.result .rmeta{margin-top:6px; font-size:10.5px; color:var(--faint); font-family:var(--disp); letter-spacing:.05em; text-transform:uppercase}
+.result .rsite{color:var(--accent); font-weight:700}
+.result .ractions{flex:none; display:flex; flex-direction:column; align-items:center; gap:8px}
+.save-star{width:32px; height:32px; border-radius:8px; border:1px solid var(--border-2); background:var(--surface); color:var(--faint); cursor:pointer; display:flex; align-items:center; justify-content:center}
+.save-star:hover{border-color:var(--accent); color:var(--accent)}
+.save-star.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent)}
+.save-star svg{width:16px; height:16px}
+.result .rgo{color:var(--faint); text-decoration:none; font-size:14px}
+.study-note{margin-top:13px; font-size:11.5px; color:var(--faint); line-height:1.5}
+.hentry .hl{cursor:pointer}
+.hentry .hrm{flex:none; width:26px; height:26px; border-radius:7px; border:1px solid var(--border-2); background:transparent; color:var(--faint); cursor:pointer; font-size:14px; line-height:1}
+.hentry .hrm:hover{border-color:var(--accent); color:var(--accent)}
+
+/* supporter: account control, modals, history */
+.gobtn{display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 14px; border-radius:11px; border:0; background:linear-gradient(180deg,var(--accent-2),var(--accent)); color:#fff; font-family:var(--disp); font-weight:600; font-size:13.5px; cursor:pointer; white-space:nowrap}
+.gobtn svg{width:16px; height:16px}
+.avatar{position:relative; width:38px; height:38px; border-radius:50%; background:linear-gradient(180deg,var(--accent-2),var(--accent)); color:#fff; font-weight:700; font-family:var(--disp); display:flex; align-items:center; justify-content:center; border:0; cursor:pointer; font-size:15px}
+.acct{position:relative}
+.acct-menu{position:absolute; top:calc(100% + 8px); right:0; min-width:236px; background:var(--surface); border:1px solid var(--border-2); border-radius:14px; box-shadow:0 18px 44px rgba(0,0,0,.45); padding:8px; z-index:120; display:none}
+.acct-menu.on{display:block}
+.acct-id{padding:8px 10px 12px}
+.acct-id .nm{font-weight:600; font-size:14px}
+.acct-id .em{font-size:12px; color:var(--muted); margin-top:1px}
+.acct-badge{display:inline-flex; align-items:center; gap:5px; margin-top:9px; font-size:11px; font-weight:700; font-family:var(--disp); color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:4px 9px}
+.acct-sep{height:1px; background:var(--border); margin:6px 0}
+.acct-item{display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:none; border:0; color:var(--text); padding:10px; border-radius:9px; cursor:pointer; font-size:14px; font-family:var(--sans)}
+.acct-item:hover{background:var(--surface-2)}
+.acct-item svg{width:17px; height:17px; color:var(--muted)}
+
+@media (max-width:430px){ .gobtn .lbl{display:none} .gobtn{padding:0 11px} }
+
+.ov{position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(10,8,6,.62); backdrop-filter:blur(4px)}
+.ov.on{display:flex}
+.sheet{position:relative; width:100%; max-width:430px; max-height:90vh; overflow-y:auto; background:var(--surface); border:1px solid var(--border-2); border-radius:20px; box-shadow:0 30px 80px rgba(0,0,0,.5); padding:26px 24px}
+.sheet h3{font-family:var(--disp); font-size:22px; margin:0 6px 6px 0; letter-spacing:-.02em; font-weight:700}
+.sheet .sub{font-size:13.5px; color:var(--muted); margin:0 0 18px; line-height:1.5}
+.sheet-x{position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:10px; border:1px solid var(--border-2); background:var(--surface-2); color:var(--text); cursor:pointer; font-size:17px; line-height:1; display:flex; align-items:center; justify-content:center}
+.sheet-x:hover{border-color:var(--accent)}
+.perks{list-style:none; padding:0; margin:0 0 18px; display:flex; flex-direction:column; gap:11px}
+.perk{display:flex; gap:11px; align-items:flex-start; font-size:14px; line-height:1.45}
+.perk .c{width:21px; height:21px; border-radius:6px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; flex:none; margin-top:1px}
+.perk .c svg{width:13px; height:13px}
+.perk b{font-weight:600}
+.plans{display:flex; gap:9px; margin-bottom:18px}
+.plan{flex:1; border:1.5px solid var(--border-2); border-radius:14px; padding:12px 10px; cursor:pointer; background:var(--surface-2); text-align:center}
+.plan.sel{border-color:var(--accent); background:var(--accent-soft)}
+.plan .amt{font-family:var(--disp); font-size:19px; font-weight:700}
+.plan .per{font-size:11px; color:var(--muted); margin-top:2px}
+.custom-amt{display:flex; align-items:center; gap:8px; margin:-8px 0 18px; border:1.5px solid var(--border-2); background:var(--surface-2); border-radius:12px; padding:0 14px; height:48px}
+.custom-amt[hidden]{display:none}
+.custom-amt .cur{font-family:var(--disp); font-weight:700; color:var(--muted); font-size:18px}
+.custom-amt input{flex:1; min-width:0; border:0; background:transparent; color:var(--text); font-family:var(--disp); font-size:18px; font-weight:600; height:100%}
+.custom-amt input:focus{outline:none}
+.signin-l{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700; font-family:var(--disp); text-align:center; margin-bottom:11px}
+.signin{display:flex; flex-direction:column; gap:9px}
+.prov{display:flex; align-items:center; justify-content:center; gap:10px; height:48px; border-radius:12px; border:1px solid var(--border-2); background:var(--surface-2); color:var(--text); font-family:var(--sans); font-weight:600; font-size:14.5px; cursor:pointer}
+.prov:hover{border-color:var(--accent)}
+.prov .pg{width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:11px; color:#fff; font-family:var(--disp)}
+.note{margin-top:15px; font-size:11.5px; color:var(--faint); text-align:center; line-height:1.5}
+.paybtn{display:flex; align-items:center; justify-content:center; gap:9px; width:100%; height:52px; border:0; border-radius:13px; background:linear-gradient(180deg,var(--accent-2),var(--accent)); color:#fff; font-family:var(--disp); font-weight:600; font-size:16px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.paybtn:hover{filter:brightness(1.04)}
+.paybtn svg{width:18px; height:18px}
+.paynote{margin:9px 0 18px; font-size:11.5px; color:var(--faint); text-align:center; line-height:1.5}
+.adfreepill{display:inline-flex; align-items:center; gap:7px; height:38px; padding:0 13px; border-radius:11px; border:1px solid var(--accent); background:var(--accent-soft); color:var(--accent-ink); font-family:var(--disp); font-weight:600; font-size:13.5px; cursor:default}
+.adfreepill svg{width:15px; height:15px}
+
+.hist{display:flex; flex-direction:column; gap:8px}
+.hentry{display:flex; gap:11px; align-items:center; padding:10px 12px; border:1px solid var(--border); border-radius:11px; background:var(--surface-2)}
+.hentry .hi{width:30px; height:30px; border-radius:8px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; flex:none}
+.hentry .hi svg{width:16px; height:16px}
+.hentry .ht{flex:1; min-width:0}
+.hentry .hl{font-size:14px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.hentry .hd{font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.hentry .htime{font-size:11px; color:var(--faint); flex:none}
+.hist-empty{text-align:center; color:var(--muted); font-size:14px; padding:28px 10px; line-height:1.5}
+.hist-foot{display:flex; justify-content:flex-end; margin-top:14px}
+.hist-clear{font-size:12.5px; font-weight:600; color:var(--muted); background:none; border:1px solid var(--border-2); border-radius:9px; padding:8px 13px; cursor:pointer; font-family:var(--sans)}
+.hist-clear:hover{border-color:var(--accent); color:var(--accent)}
+
+footer{margin-top:30px}
+.promo-area{max-width:660px; margin:0 auto; padding:0 22px}
+.promo-unit{position:relative; border:1px solid var(--border); border-radius:12px; background:var(--surface); height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; color:var(--faint)}
+.promo-unit .tag{position:absolute; top:8px; left:11px; font-size:9px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; opacity:.5}
+.promo-unit .ph{font-size:12px; opacity:.65}
+.footrow{max-width:660px; margin:16px auto 0; padding:18px 22px 30px; display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--muted); border-top:1px solid var(--border); }
+.footrow a{color:var(--muted); text-decoration:none} .footrow a:hover{color:var(--text)}
+
+@media (max-width:560px){
+  .cmd input{height:54px; padding-right:50px}
+  .editrow{gap:10px}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap" style="display:flex;align-items:center;justify-content:space-between">
+  <button class="brand" id="brand"><span class="b">⇄</span> it<em>converts</em></button>
+  <div style="display:flex;gap:10px">
+    <button class="calcbtn" data-open-calc aria-label="Open calculator" title="Scientific & graphing calculator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8"/><path d="M8 11h0M12 11h0M16 11h0M8 14h0M12 14h0M16 14h0M8 17h0M12 17h0M16 17h0"/></svg><span class="lbl">Calculator</span></button>
+    <span class="acct" id="acctwrap"></span>
+    <button class="tbtn" id="theme" aria-label="Toggle theme"></button>
+  </div>
+</div></header>
+
+<main><div class="wrap">
+  <div class="kick">Just type it</div>
+  <h1 class="lead">What do you want to <span class="hl">convert?</span></h1>
+  <div class="cmd">
+    <input id="cmd" type="text" placeholder="100 km to miles" autocomplete="off" spellcheck="false" autofocus>
+    <button class="ent" id="ent" aria-label="Convert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="parsehint" id="hint">Try “2 cups to ml”, “350 F to C”, or “5 GB to MB”.</div>
+
+  <div class="result" id="result">
+    <div class="rtop"><span class="pill" id="rpill"></span></div>
+    <div class="editrow">
+      <div class="seg"><input class="v" id="ev" type="text" inputmode="decimal" value="100"><div class="dd" id="efrom" aria-label="From unit"></div></div>
+      <button class="swap" id="swap" aria-label="Swap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l-3 3 3 3M4 13h13M17 14l3-3-3-3M20 11H7"/></svg></button>
+      <div class="seg"><div class="dd" id="eto" aria-label="To unit"></div></div>
+    </div>
+    <div class="big" id="big">—</div>
+    <div class="rbar"><div class="eq" id="eq"></div><button class="copy" id="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg> Copy</button></div>
+  </div>
+
+  <section class="ask" id="ask">
+    <div class="ask-top">
+      <span class="study-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4z"/><path d="M20 5h-1a3 3 0 0 0-3 3v11"/></svg></span>
+      <div class="ask-head">
+        <h2>Study search</h2>
+        <p>Search trusted, ad-free educational sources — Wikipedia, open textbooks and dictionaries. Built for students everywhere.</p>
+      </div>
+      <select id="asklang" class="lang-sel" aria-label="Search language">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português</option>
+        <option value="it">Italiano</option>
+        <option value="ru">Русский</option>
+        <option value="ar">العربية</option>
+        <option value="hi">हिन्दी</option>
+        <option value="bn">বাংলা</option>
+        <option value="zh">中文</option>
+        <option value="ja">日本語</option>
+      </select>
+    </div>
+    <div class="ask-bar">
+      <input id="askq" type="text" placeholder="Search a topic — photosynthesis, Pythagoras, World War II…" autocomplete="off">
+      <button id="asksend" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+    </div>
+    <div class="ask-tools"><button id="savedbtn" class="savedbtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.4 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.3l6-.9z"/></svg> <span id="savedbtn-lbl">Saved searches</span></button></div>
+    <div class="ask-out" id="askout" hidden></div>
+  </section>
+
+  <div class="browse">
+    <div class="lbl">Or browse converters</div>
+    <div class="pills" id="pills"></div>
+  </div>
+</div></main>
+
+<footer>
+  <div class="promo-area"><div class="promo-unit" id="promo"><div class="tag">Advertisement</div><div class="ph">Reserved slot — slim, labeled, and out of the way.</div></div></div>
+  <div class="footrow"><span>© <span id="yr"></span> itconverts — type anything, convert everything.</span><span><a href="guides/">Guides</a> · <a href="writing/">Writing</a> · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="contact.html">Contact</a></span></div>
+</footer>
+
+<div class="ov" id="ov-support" role="dialog" aria-label="Support itconverts">
+  <div class="sheet">
+    <button class="sheet-x" data-close aria-label="Close">✕</button>
+    <h3>Go ad-free</h3>
+    <p class="sub">Supporting itconverts keeps it fast, free and ad-free for students everywhere. A one-time donation removes ads on this device.</p>
+    <ul class="perks">
+      <li class="perk"><span class="c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg></span><span><b>No ads, ever.</b> A clean, quiet page with nothing in your way.</span></li>
+      <li class="perk"><span class="c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg></span><span><b>Keeps it free for students.</b> Your support pays the bills so the tools stay free for everyone, everywhere.</span></li>
+      <li class="perk"><span class="c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg></span><span><b>Saved searches are already free.</b> Your saved searches stay on your device whether you donate or not — no account needed.</span></li>
+    </ul>
+    <div class="plans" id="plans">
+      <button class="plan sel" type="button" data-plan="donate"><div class="amt">$1</div><div class="per">one-time</div></button>
+      <button class="plan" type="button" data-plan="custom"><div class="amt">Custom</div><div class="per">your amount</div></button>
+    </div>
+    <div class="custom-amt" id="customamt" hidden><span class="cur">$</span><input id="customval" type="number" min="1" step="1" inputmode="decimal" placeholder="5" aria-label="Custom amount"></div>
+    <button class="paybtn" id="paybtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg> <span id="paybtn-lbl">Continue to secure payment · $1</span></button>
+    <p class="paynote">Card, Apple&nbsp;Pay or Google&nbsp;Pay — handled securely by Stripe. No account needed.</p>
+    <p class="note">A one-time donation removes ads on this device. Thank you for helping keep itconverts free for students everywhere.</p>
+  </div>
+</div>
+
+<div class="ov" id="ov-history" role="dialog" aria-label="Saved searches">
+  <div class="sheet">
+    <button class="sheet-x" data-close aria-label="Close">✕</button>
+    <h3>Saved searches</h3>
+    <p class="sub">Kept on this device — no account needed. Tap one to run it again.</p>
+    <div class="hist" id="histlist"></div>
+    <div class="hist-foot"><button class="hist-clear" id="histclear" type="button">Clear saved searches</button></div>
+  </div>
+</div>
+
+<script src="convert.js"></script>
+<script src="icons.js"></script>
+<script src="supporter.js"></script>
+<script src="payments.js"></script>
+<script src="ads.js"></script>
+<script src="study-search.js"></script>
+<script src="saved.js"></script>
+<script src="calc-modal.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var state={cat:null};
+
+  /* theme */
+  var sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>';
+  var moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8 8 0 1 1 11.2 3a6.2 6.2 0 0 0 9.8 9.8z"/></svg>';
+  function applyTheme(t){document.documentElement.setAttribute('data-theme',t); $('#theme').innerHTML=(t==='dark'?sun:moon); try{localStorage.setItem('itc-theme-c',t);}catch(e){}}
+  var sv; try{sv=localStorage.getItem('itc-theme-c');}catch(e){}
+  applyTheme(sv||'dark');
+  $('#theme').addEventListener('click',function(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');});
+
+  /* alias resolver across all categories */
+  var ALIAS={ lbs:'lb', pounds:'lb', pound:'lb', kgs:'kg', kilos:'kg', kilo:'kg', grams:'g', gram:'g', miles:'mi', mile:'mi', meters:'m', metres:'m', metre:'m', meter:'m', feet:'ft', foot:'ft', inches:'in', inch:'in', litres:'l', liters:'l', litre:'l', liter:'l', celsius:'c', centigrade:'c', fahrenheit:'f', kelvin:'k', secs:'s', second:'s', seconds:'s', mins:'min', minute:'min', minutes:'min', hours:'h', hour:'h', hr:'h', hrs:'h', days:'day', cups:'cup', gallons:'gal', gallon:'gal', knots:'knot', yards:'yd', yard:'yd', tonnes:'t', tonne:'t', ounces:'oz', ounce:'oz', mph_:'mph' };
+  function norm(s){return (s||'').toLowerCase().replace(/[^a-z0-9µ°/]/g,'');}
+  function resolve(token){
+    var raw=token.toLowerCase().trim(); var t=norm(raw); if(!t) return null;
+    if(ALIAS[raw]) t=ALIAS[raw]; if(ALIAS[t]) t=ALIAS[t];
+    for(var i=0;i<ITC.categories.length;i++){var c=ITC.categories[i];
+      for(var j=0;j<c.units.length;j++){var u=c.units[j];
+        if(u.id.toLowerCase()===t) return {c:c,u:u};
+        if(norm(u.symbol)===t) return {c:c,u:u};
+      }}
+    // name startsWith
+    for(var i2=0;i2<ITC.categories.length;i2++){var c2=ITC.categories[i2];
+      for(var j2=0;j2<c2.units.length;j2++){var u2=c2.units[j2];
+        if(norm(u2.name).indexOf(t)===0) return {c:c2,u:u2};
+      }}
+    return null;
+  }
+
+  /* themed custom dropdowns (native option lists can't be themed) */
+  function closeAllDD(){ var o=document.querySelectorAll('.dd.open'); for(var i=0;i<o.length;i++){ o[i].classList.remove('open'); } }
+  document.addEventListener('click',function(){ closeAllDD(); });
+  function makeDropdown(dd, alignRight){
+    dd.classList.add('dd');
+    var btn=document.createElement('button'); btn.type='button'; btn.className='dd-btn';
+    var lbl=document.createElement('span'); lbl.className='dd-lbl'; lbl.textContent='—';
+    var chev=document.createElement('span'); chev.className='chev';
+    chev.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+    btn.appendChild(lbl); btn.appendChild(chev);
+    var list=document.createElement('div'); list.className='dd-list'; list.style[alignRight?'right':'left']='0';
+    dd.appendChild(btn); dd.appendChild(list);
+    var st={value:null,options:[],onChange:null};
+    function close(){ dd.classList.remove('open'); }
+    function open(){ closeAllDD(); dd.classList.add('open'); var s=list.querySelector('.sel'); if(s){ list.scrollTop=Math.max(0,s.offsetTop-100); } }
+    btn.addEventListener('click',function(e){ e.stopPropagation(); if(dd.classList.contains('open')) close(); else open(); });
+    list.addEventListener('click',function(e){ e.stopPropagation(); });
+    var api={
+      setOptions:function(opts){ st.options=opts; list.innerHTML=''; opts.forEach(function(o){ var el=document.createElement('div'); el.className='dd-opt'; el.textContent=o.label; el.setAttribute('data-v',o.value); el.addEventListener('click',function(){ api.set(o.value); close(); if(st.onChange) st.onChange(); }); list.appendChild(el); }); },
+      set:function(v){ st.value=v; var f=null; for(var i=0;i<st.options.length;i++){ if(st.options[i].value===v){ f=st.options[i]; break; } } lbl.textContent=f?f.label:'—'; var k=list.children; for(var j=0;j<k.length;j++){ k[j].classList.toggle('sel', k[j].getAttribute('data-v')===v); } },
+      get:function(){ return st.value; },
+      onChange:function(fn){ st.onChange=fn; }
+    };
+    return api;
+  }
+  var efromDD=makeDropdown($('#efrom'),false), etoDD=makeDropdown($('#eto'),true);
+  efromDD.onChange(function(){render(); commitConv();}); etoDD.onChange(function(){render(); commitConv();});
+  function fill(dd,cat,val){ dd.setOptions(cat.units.map(function(u){return {value:u.id,label:u.name+(u.symbol?' ('+u.symbol+')':'')};})); dd.set(val); }
+
+  function setConversion(catId,fromId,toId,value){
+    var cat=ITC.getCategory(catId); if(!cat) return; state.cat=cat;
+    $('#rpill').innerHTML=ITCICON(cat.icon)+'<span>'+cat.name+'</span>';
+    fill(efromDD,cat,fromId||cat.units[0].id);
+    fill(etoDD,cat,toId||cat.units[Math.min(1,cat.units.length-1)].id);
+    if(value!=null) $('#ev').value=value;
+    if(cat.id==='numbase'&&value==null) $('#ev').value='1010';
+    render(); highlightCategory(catId);
+  }
+
+  function render(){
+    var cat=state.cat; if(!cat) return;
+    var raw=$('#ev').value, f=efromDD.get(), t=etoDD.get();
+    var out=ITC.convertString(cat.id,raw,f,t);
+    var to=cat.unitMap[t], from=cat.unitMap[f];
+    if(out===''){$('#big').textContent='—'; $('#eq').textContent='Enter a number'; return;}
+    $('#big').innerHTML=out+'<span class="u">'+(to.symbol||to.name)+'</span>';
+    $('#eq').innerHTML=raw+' '+(from.symbol||from.name)+' &nbsp;=&nbsp; '+out+' '+(to.symbol||to.name);
+  }
+
+  /* command parsing */
+  function parse(str){
+    var s=str.trim(); if(!s){$('#hint').textContent='Try “2 cups to ml”, “350 F to C”, or “5 GB to MB”.'; $('#hint').className='parsehint'; return;}
+    // number
+    var num=null; var m=s.match(/-?\d+(\.\d+)?/); if(m){num=parseFloat(m[0]);}
+    var rest=s.replace(/-?\d+(\.\d+)?/,' ');
+    var parts=rest.split(/\s+to\s+|\s+in\s+|\s*[-–>]+\s*/i).map(function(x){return x.trim();}).filter(Boolean);
+    var fr=parts[0]?resolve(parts[0]):null;
+    var tr=parts[1]?resolve(parts[1]):null;
+    if(fr&&tr&&fr.c.id===tr.c.id){ setConversion(fr.c.id,fr.u.id,tr.u.id,num!=null?num:1); ok('Converting '+fr.c.name.toLowerCase()); return; }
+    if(fr&&tr&&fr.c.id!==tr.c.id){ err('Those units aren’t the same kind of measure.'); return; }
+    if(fr){ setConversion(fr.c.id,fr.u.id,null,num!=null?num:1); ok('Pick a target unit on the right'); return; }
+    // category name?
+    for(var i=0;i<ITC.categories.length;i++){ if(norm(ITC.categories[i].name).indexOf(norm(s))===0||norm(ITC.categories[i].blurb).indexOf(norm(s))>=0){ setConversion(ITC.categories[i].id); ok('Browsing '+ITC.categories[i].name.toLowerCase()); return; } }
+    err('Couldn’t read that — try “100 km to miles”.');
+  }
+  function ok(msg){$('#hint').textContent=msg; $('#hint').className='parsehint';}
+  function err(msg){$('#hint').textContent=msg; $('#hint').className='parsehint err';}
+
+  var cmd=$('#cmd'); var deb;
+  cmd.addEventListener('input',function(){clearTimeout(deb); deb=setTimeout(function(){parse(cmd.value);},160);});
+  cmd.addEventListener('keydown',function(e){if(e.key==='Enter'||e.keyCode===13){parse(cmd.value); commitConv();}});
+  $('#ent').addEventListener('click',function(){parse(cmd.value);});
+
+  $('#ev').addEventListener('input',render);
+  $('#ev').addEventListener('change',commitConv);
+  $('#swap').addEventListener('click',function(){var a=efromDD.get(),b=etoDD.get(); var cur=$('#big').textContent; efromDD.set(b); etoDD.set(a); var n=parseFloat(cur.replace(/,/g,'')); if(!isNaN(n)&&state.cat.id!=='numbase')$('#ev').value=n; this.classList.toggle('s'); render(); commitConv();});
+  $('#copy').addEventListener('click',function(){var txt=$('#big').textContent; var btn=this; function d(){var o=btn.innerHTML; btn.innerHTML='✓ Copied'; setTimeout(function(){btn.innerHTML=o;},1300);} if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(d,d);}else{d();}});
+
+  /* browse pills */
+  var pills=$('#pills'); var catPills={};
+  function highlightCategory(id){ for(var k in catPills){ if(catPills.hasOwnProperty(k)) catPills[k].classList.toggle('active', k===id); } }
+  ITC.categories.forEach(function(c){var b=document.createElement('button'); b.className='cpill'; b.type='button'; b.innerHTML=ITCICON(c.icon)+'<span>'+c.name+'</span>'; b.addEventListener('click',function(){setConversion(c.id); $('#cmd').value=''; ok('Browsing '+c.name.toLowerCase()); commitConv();}); catPills[c.id]=b; pills.appendChild(b);});
+
+  $('#brand').addEventListener('click',function(){$('#cmd').value=''; cmd.focus(); setConversion('length','km','mi',100); ok('Try “2 cups to ml”, “350 F to C”, or “5 GB to MB”.'); $('#hint').className='parsehint';});
+
+  /* AI study helper */
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  /* ---- Study search (curated educational sources — Wikimedia; no AI) ---- */
+  var askq=$('#askq'), asksend=$('#asksend'), askout=$('#askout'), asklang=$('#asklang'), askBusy=false, lastResults=[], lastQuery='';
+  function setAsk(html){ askout.innerHTML=html; askout.hidden=false; askout.style.opacity=''; }
+  if(asklang){ asklang.value=(window.ITC_STUDY?ITC_STUDY.getLang():'en'); asklang.addEventListener('change',function(){ if(window.ITC_STUDY) ITC_STUDY.setLang(asklang.value); if(askq.value.trim()) runSearch(); }); }
+  function saveSvg(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.4 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.3l6-.9z"/></svg>'; }
+  function renderResults(data){
+    lastResults=data.results||[]; lastQuery=data.query||'';
+    if(!lastResults.length){ setAsk('<div class="refusal">No educational results for “'+esc(data.query)+'”. Try simpler or more specific words — results come only from trusted study sources (Wikipedia, open textbooks, dictionaries).</div>'); return; }
+    var saved=(window.ITC_SAVED && ITC_SAVED.has(lastQuery, data.lang));
+    var cards=lastResults.map(function(r){
+      var thumb=r.thumb?'<img class="thumb" src="'+esc(r.thumb)+'" alt="" loading="lazy">':'';
+      return '<div class="result">'+thumb
+        +'<div class="rbody"><a class="rtitle" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.title)+'</a>'
+        +'<div class="rsnip">'+esc(r.snippet)+'</div>'
+        +'<div class="rmeta"><span class="rsite">'+esc(r.site)+'</span> · '+esc(r.badge)+'</div></div>'
+        +'<div class="ractions"><a class="rgo" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open in new tab">↗</a></div></div>';
+    }).join('');
+    setAsk('<div class="results">'+cards+'</div>'
+      +'<button class="savedbtn save-this'+(saved?' on':'')+'" id="savethis" type="button" style="margin-top:12px">'+saveSvg()+'<span>'+(saved?'Saved to your searches':'Save this search')+'</span></button>'
+      +'<div class="study-note">Results come only from free, ad-free educational sources. Saved searches stay on this device.</div>');
+    var st=$('#savethis');
+    if(st) st.addEventListener('click',function(){ if(!window.ITC_SAVED) return; var on=ITC_SAVED.toggle({query:lastQuery, lang:data.lang}); st.classList.toggle('on',on); st.querySelector('span').textContent=on?'Saved to your searches':'Save this search'; });
+  }
+  function runSearch(q){
+    q=(q!=null?q:askq.value).trim(); if(!q||askBusy) return;
+    if(q!==askq.value) askq.value=q;
+    if(!window.ITC_STUDY){ setAsk('<div class="refusal">Search isn’t available in this view.</div>'); return; }
+    askBusy=true; asksend.disabled=true;
+    setAsk('<div class="ask-loading"><span class="spin"></span> Searching trusted educational sources…</div>');
+    ITC_STUDY.search(q,{lang:asklang?asklang.value:undefined}).then(function(data){ renderResults(data); })
+      .catch(function(){ setAsk('<div class="refusal">Sorry — couldn’t reach the study sources just now. Please try again in a moment.</div>'); })
+      .then(function(){ askBusy=false; asksend.disabled=false; });
+  }
+  asksend.addEventListener('click',function(){ runSearch(); });
+  askq.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.keyCode===13){ runSearch(); } });
+  askq.addEventListener('input',function(){ if(!askq.value.trim() && !askout.hidden){ askout.style.opacity='0'; setTimeout(function(){ if(!askq.value.trim()){ askout.hidden=true; askout.innerHTML=''; askout.style.opacity=''; } },220); } });
+  var savedbtn=$('#savedbtn'); if(savedbtn) savedbtn.addEventListener('click',function(){ openHistory(); });
+  function refreshSavedCount(){ var l=(window.ITC_SAVED?ITC_SAVED.list():[]); var lbl=$('#savedbtn-lbl'); if(lbl) lbl.textContent='Saved searches'+(l.length?' ('+l.length+')':''); }
+  if(window.ITC_SAVED){ ITC_SAVED.subscribe(refreshSavedCount); } refreshSavedCount();
+
+  /* ---- supporter / account / history ---- */
+  function commitConv(){
+    var cat=state.cat; if(!cat) return;
+    var fId=efromDD.get(), tId=etoDD.get(); var f=cat.unitMap[fId], t=cat.unitMap[tId]; if(!f||!t) return;
+    var raw=$('#ev').value; var out=ITC.convertString(cat.id,raw,fId,tId); if(out==='') return;
+    if(window.ITC_USER) ITC_USER.log({t:'convert', label:raw+' '+(f.symbol||f.name)+' → '+out+' '+(t.symbol||t.name), detail:cat.name});
+  }
+  var acctwrap=$('#acctwrap'), ovSupport=$('#ov-support'), ovHistory=$('#ov-history');
+  var selectedPlan='donate';
+  function openOv(ov){ ov.classList.add('on'); document.body.style.overflow='hidden'; }
+  function closeOv(ov){ ov.classList.remove('on'); document.body.style.overflow=''; }
+  Array.prototype.forEach.call(document.querySelectorAll('.ov'),function(ov){
+    ov.addEventListener('click',function(e){ if(e.target===ov) closeOv(ov); });
+    var x=ov.querySelector('[data-close]'); if(x) x.addEventListener('click',function(){ closeOv(ov); });
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ Array.prototype.forEach.call(document.querySelectorAll('.ov.on'),closeOv); var am=document.querySelector('.acct-menu.on'); if(am) am.classList.remove('on'); } });
+  // Current donation amount in whole dollars (from $1 preset or custom field), min $1.
+  function currentDollars(){ if(selectedPlan==='custom'){ var cv=$('#customval'); var n=cv?parseFloat(cv.value):NaN; return (n>0)?n:1; } return 1; }
+  function updatePayLabel(){ var l=$('#paybtn-lbl'); if(l) l.textContent='Continue to secure payment · $'+currentDollars(); }
+  $('#plans').addEventListener('click',function(e){ var p=e.target.closest('.plan'); if(!p) return; selectedPlan=p.getAttribute('data-plan'); Array.prototype.forEach.call(this.children,function(c){c.classList.toggle('sel',c===p);}); var cu=$('#customamt'); if(cu){ if(selectedPlan==='custom'){ cu.hidden=false; var cv=$('#customval'); if(cv) cv.focus(); } else { cu.hidden=true; } } updatePayLabel(); });
+  var cvField=$('#customval'); if(cvField) cvField.addEventListener('input',updatePayLabel);
+
+  // PAY — this is what removes ads. Goes to Stripe Checkout (card / Apple Pay / Google Pay).
+  var paybtn=$('#paybtn');
+  if(paybtn) paybtn.addEventListener('click',function(){
+    var cents=Math.round(currentDollars()*100);
+    if(window.ITC_PAY && ITC_PAY.configured()){
+      paybtn.disabled=true; var lbl=$('#paybtn-lbl'); var prev=lbl?lbl.textContent:''; if(lbl) lbl.textContent='Redirecting to secure checkout…';
+      ITC_PAY.checkout(cents).catch(function(){ paybtn.disabled=false; if(lbl) lbl.textContent=prev; alert('Could not start checkout. Please try again.'); });
+    } else {
+      alert('Payments aren’t connected yet.\n\nAdd your Stripe keys + deploy /server, then set ITC_CONFIG.API_BASE.\nSee MONETIZATION.md.');
+    }
+  });
+
+  // SIGN-IN — identity only, for syncing across devices + saved history. Does NOT remove ads.
+  Array.prototype.forEach.call(document.querySelectorAll('.prov'),function(b){ b.addEventListener('click',function(){ var prov=b.getAttribute('data-prov'); var dom=(ITC_USER.providers[prov]&&ITC_USER.providers[prov].email)||'example.com'; ITC_USER.signIn(prov,{plan:'', name:'Member', email:'member@'+dom}); closeOv(ovSupport); }); });
+
+  // Ads are gated on a VERIFIED payment (ITC_PAY), never on sign-in.
+  function paidSupporter(){ return !!(window.ITC_PAY && ITC_PAY.isSupporter()); }
+  function applyAds(){ var promo=document.querySelector('.promo-area'); if(promo) promo.style.display=paidSupporter()?'none':''; }
+  function initials(name){ name=(name||'Member').trim(); var p=name.split(/\s+/); return ((p[0]||'M')[0]+(p[1]?p[1][0]:'')).toUpperCase(); }
+  function renderAccount(){
+    var u=ITC_USER.current(); var paid=paidSupporter(); acctwrap.innerHTML='';
+    if(u){
+      // Signed in -> avatar + menu (history). Badge reflects PAID status, not sign-in.
+      var av=document.createElement('button'); av.className='avatar'; av.type='button'; av.textContent=initials(u.name); av.title=u.name+' · '+u.providerName;
+      var menu=document.createElement('div'); menu.className='acct-menu';
+      var badge = paid
+        ? '<span class="acct-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg> Ad-free'+(ITC_PAY.plan()?' · '+esc(ITC_PAY.plan()):'')+'</span>'
+        : '<span class="acct-badge" style="background:var(--surface-2);color:var(--muted)">Signed in</span>';
+      menu.innerHTML='<div class="acct-id"><div class="nm">'+esc(u.name)+'</div><div class="em">'+esc(u.email)+'</div>'+badge+'</div><div class="acct-sep"></div>'
+        + (paid? '' : '<button class="acct-item" data-act="goadfree"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.4 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.3l6-.9z"/></svg> Go ad-free</button>')
+        +'<button class="acct-item" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg> Saved searches</button>'
+        +'<button class="acct-item" data-act="signout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17l5-5-5-5M21 12H9M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg> Sign out</button>';
+      av.addEventListener('click',function(e){ e.stopPropagation(); menu.classList.toggle('on'); });
+      menu.addEventListener('click',function(e){ var it=e.target.closest('.acct-item'); if(!it) return; var act=it.getAttribute('data-act'); menu.classList.remove('on'); if(act==='history'){ openHistory(); } else if(act==='signout'){ ITC_USER.signOut(); } else if(act==='goadfree'){ selectedPlan='donate'; updatePayLabel(); var cu=$('#customamt'); if(cu) cu.hidden=true; openOv(ovSupport); } });
+      acctwrap.appendChild(av); acctwrap.appendChild(menu);
+    } else if(paid){
+      // Paid but not signed in -> ad-free indicator (sign in later to sync devices).
+      var pill=document.createElement('span'); pill.className='adfreepill'; pill.title='Sign in to keep ad-free on other devices';
+      pill.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg> Ad-free';
+      acctwrap.appendChild(pill);
+    } else {
+      // Default -> Go ad-free.
+      var b=document.createElement('button'); b.className='gobtn'; b.type='button'; b.setAttribute('aria-label','Go ad-free');
+      b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.4 6 .9-4.3 4.2 1 6-5.4-2.8-5.4 2.8 1-6L3.3 9.3l6-.9z"/></svg><span class="lbl">Go ad-free</span>';
+      b.addEventListener('click',function(){ selectedPlan='donate'; updatePayLabel(); var cu=$('#customamt'); if(cu) cu.hidden=true; openOv(ovSupport); });
+      acctwrap.appendChild(b);
+    }
+  }
+  document.addEventListener('click',function(){ var m=document.querySelector('.acct-menu.on'); if(m) m.classList.remove('on'); });
+  function timeAgo(ts){ var s=Math.floor((Date.now()-ts)/1000); if(s<60)return 'just now'; var m=Math.floor(s/60); if(m<60)return m+'m ago'; var h=Math.floor(m/60); if(h<24)return h+'h ago'; var d=Math.floor(h/24); if(d<7)return d+'d ago'; return new Date(ts).toLocaleDateString(); }
+  var HIST_ICON={ convert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l-3 3 3 3M4 13h13M17 14l3-3-3-3M20 11H7"/></svg>', calc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h0M12 11h0M16 11h0M8 15h0M12 15h0"/></svg>', study:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4z"/><path d="M20 5h-1a3 3 0 0 0-3 3v11"/></svg>' };
+  var LANG_NAME={en:'English',es:'Español',fr:'Français',de:'Deutsch',pt:'Português',it:'Italiano',ru:'Русский',ar:'العربية',hi:'हिन्दी',bn:'বাংলা',zh:'中文',ja:'日本語'};
+  function renderHistory(){
+    var list=$('#histlist'); var h=(window.ITC_SAVED?ITC_SAVED.list():[]);
+    if(!h.length){ list.innerHTML='<div class="hist-empty">No saved searches yet. Run a study search and tap “Save this search” to keep it here.</div>'; return; }
+    list.innerHTML=h.map(function(e){ return '<div class="hentry" data-id="'+esc(e.id)+'"><span class="hi">'+HIST_ICON.study+'</span><div class="ht"><div class="hl" data-q="'+esc(e.query)+'" data-lang="'+esc(e.lang||'en')+'">'+esc(e.query)+'</div><div class="hd">'+esc(LANG_NAME[e.lang]||e.lang||'English')+'</div></div><span class="htime">'+timeAgo(e.ts)+'</span><button class="hrm" data-rm="'+esc(e.id)+'" aria-label="Remove" title="Remove">✕</button></div>'; }).join('');
+    list.querySelectorAll('.hl').forEach(function(el){ el.addEventListener('click',function(){ var q=el.getAttribute('data-q'); var lg=el.getAttribute('data-lang')||'en'; if(asklang){ asklang.value=lg; if(window.ITC_STUDY) ITC_STUDY.setLang(lg); } closeOv(ovHistory); runSearch(q); document.getElementById('ask').scrollIntoView({behavior:'smooth',block:'start'}); }); });
+    list.querySelectorAll('.hrm').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); if(window.ITC_SAVED) ITC_SAVED.remove(b.getAttribute('data-rm')); renderHistory(); }); });
+  }
+  function openHistory(){ renderHistory(); openOv(ovHistory); }
+  $('#histclear').addEventListener('click',function(){ if(window.ITC_SAVED) ITC_SAVED.clear(); renderHistory(); });
+  if(window.ITC_SAVED){ ITC_SAVED.subscribe(function(){ if(ovHistory.classList.contains('on')) renderHistory(); }); }
+  if(window.ITC_USER){ ITC_USER.subscribe(function(){ renderAccount(); applyAds(); }); }
+  if(window.ITC_PAY){ ITC_PAY.subscribe(function(){ renderAccount(); applyAds(); }); }
+  renderAccount(); applyAds(); updatePayLabel();
+
+  $('#yr').textContent=new Date().getFullYear();
+  setConversion('length','km','mi',100);
+})();
+</script>
+</body>
+</html>
