@@ -1,4 +1,4 @@
-/* itconverts — payments.js  (window.ITC_PAY)
+/* Karo Convert — payments.js  (window.ITC_PAY)
  * REAL ad-free entitlement, backed by Stripe. Replaces the old "signing in
  * instantly makes you a supporter" mock in supporter.js.
  *
@@ -17,7 +17,7 @@
 (function (g) {
   'use strict';
   var CFG = g.ITC_CONFIG || {};
-  var API = (CFG.API_BASE || '').replace(/\/$/, '');     // e.g. "https://api.itconverts.com" or "/api"
+  var API = (CFG.API_BASE || '').replace(/\/$/, '');     // e.g. "https://api.karoconvert.com" or "/api"
   var SKEY = 'itc-stripe-session';                       // stored Checkout Session id
   var ENTKEY = 'itc-entitlement';                        // cached {supporter, plan, ts} (cache only; server is truth)
 

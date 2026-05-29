@@ -1,4 +1,4 @@
-# itconverts — monetization & launch guide
+# Karo Convert — monetization & launch guide
 
 This folder is the **prototype with real monetization wired in**. It's still the
 plain HTML/CSS/JS design bundle (per the original README, you'd rebuild this in
@@ -47,7 +47,7 @@ scale with a faster CDN, but it's a bit more wiring. Vercel is the easier start.
 | `saved.js` | Device-local saved-searches store. |
 | `payments.js` | Stripe checkout + verified ad-free entitlement (`ITC_PAY`). |
 | `ads.js` | Drops AdSense into the existing slot; hides it for supporters. |
-| `index.html` | The app (was itconverts.html): converter, calculator launcher, study search, payment wiring, donate modal. |
+| `index.html` | The app (was Karo Convert.html): converter, calculator launcher, study search, payment wiring, donate modal. |
 | `api/` | Stripe serverless endpoints (Vercel functions): create-checkout-session, verify-session, webhook. |
 | `server-alternative-cloudflare/` | The same endpoints as one Cloudflare Worker (only if you choose Cloudflare). |
 | `dev/` | The content generator + automated test harness (record — see DEVELOPMENT.md). |
@@ -133,7 +133,7 @@ FAQs, and **no broken internal links or assets**.
 > brief / instructor. Good practice, and it keeps the content trustworthy.
 
 **Before you publish, edit these placeholders:**
-- `SITE` domain in `sitemap.xml` and `robots.txt` (currently `itconverts.example`).
+- `SITE` domain in `sitemap.xml` and `robots.txt` (currently `karoconvert.com`).
 - Contact email in `contact.html` (and the `mailto:` link).
 - Owner name + "Last updated" date in `privacy.html` and `terms.html`.
 - The privacy/terms text is a **starting template, not legal advice** — review it

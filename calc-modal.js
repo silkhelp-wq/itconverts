@@ -1,4 +1,4 @@
-/* itconverts — calc-modal.js
+/* Karo Convert — calc-modal.js
  * Injects a shared "Calculator" modal that embeds calculator.html in an iframe.
  * Any element with [data-open-calc] opens it. Esc / backdrop / close button dismiss.
  * Self-contained; no dependencies. Inherits each page's --accent if present. */
@@ -30,7 +30,7 @@
   var iframe = null;
 
   function open() {
-    if (!iframe) { iframe = document.createElement('iframe'); iframe.title = 'itconverts calculator'; iframe.src = 'calculator.html'; sheet.appendChild(iframe); }
+    if (!iframe) { iframe = document.createElement('iframe'); iframe.title = 'Karo Convert calculator'; iframe.src = 'calculator.html'; sheet.appendChild(iframe); }
     ov.classList.add('on'); document.body.style.overflow = 'hidden';
   }
   function close() { ov.classList.remove('on'); document.body.style.overflow = ''; }

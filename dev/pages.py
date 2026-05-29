@@ -1,7 +1,7 @@
 import json, sys, os, re, threading, time, http.server, socketserver, urllib.parse
 from playwright.sync_api import sync_playwright
 
-ROOT="/home/claude/itconverts-build"; PORT=8802
+ROOT="/home/claude/Karo Convert-build"; PORT=8802
 results=[]
 def check(n,c,d=""): results.append((("PASS" if c else "FAIL"),n,str(d)))
 
@@ -25,7 +25,7 @@ def resolve(base_rel, href):
     if os.path.isdir(os.path.join(ROOT,target)): target=os.path.join(target,"index.html")
     return target
 broken=[]
-allpages=PAGES+["itconverts.html"]
+allpages=PAGES+["Karo Convert.html"]
 for pg in allpages:
     fp=os.path.join(ROOT,pg)
     htmltxt=open(fp,encoding="utf-8").read()

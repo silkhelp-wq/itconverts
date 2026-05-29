@@ -1,4 +1,4 @@
-/* itconverts — study-search.js   (window.ITC_STUDY)
+/* Karo Convert — study-search.js   (window.ITC_STUDY)
  * A refined, education-only search for students of all ages, anywhere.
  *
  * Design decision #1 (chosen): results come ONLY from a curated allowlist of
@@ -61,7 +61,7 @@
 
   function fetchSource(src, query, l, limit) {
     var ep = 'https://' + src.host(l) + '/w/rest.php/v1/search/page?q=' + encodeURIComponent(query) + '&limit=' + (limit || 5);
-    return fetch(ep, { headers: { 'Accept': 'application/json', 'Api-User-Agent': 'itconverts/1.0 (educational search)' } })
+    return fetch(ep, { headers: { 'Accept': 'application/json', 'Api-User-Agent': 'Karo Convert/1.0 (educational search)' } })
       .then(function (r) { return r.ok ? r.json() : { pages: [] }; })
       .then(function (d) { return (d && d.pages ? d.pages : []).map(function (p) { return normalizePage(p, src, l); }).filter(Boolean); })
       .catch(function () { return []; });   // one source failing must not break the whole search

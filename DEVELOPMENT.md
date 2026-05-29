@@ -1,6 +1,6 @@
 # Development notes
 
-A record of how itconverts was built and the decisions behind it, so the reasoning
+A record of how Karo Convert was built and the decisions behind it, so the reasoning
 lives with the code.
 
 ## Starting point

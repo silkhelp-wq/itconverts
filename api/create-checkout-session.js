@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
           currency: 'usd',
           unit_amount: amount,
           product_data: {
-            name: 'itconverts — Go ad-free',
+            name: 'Karo Convert — Go ad-free',
             description: 'Removes ads and unlocks saved history. Thank you for supporting a free tool.'
           }
         }
@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
       // {CHECKOUT_SESSION_ID} is substituted by Stripe on redirect.
       success_url: body.success_url || 'https://example.com/?paid=1&session_id={CHECKOUT_SESSION_ID}',
       cancel_url: body.cancel_url || 'https://example.com/?paid=0',
-      metadata: { product: 'itconverts-adfree' }
+      metadata: { product: 'Karo Convert-adfree' }
     });
 
     return res.status(200).json({ url: session.url, id: session.id });

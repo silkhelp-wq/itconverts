@@ -1,7 +1,7 @@
-# Handoff: itconverts — universal converter, calculator, AI study helper & supporter system
+# Handoff: Karo Convert — universal converter, calculator, AI study helper & supporter system
 
 ## Overview
-**itconverts** is a fast, free, mobile-first web app with four connected features:
+**Karo Convert** is a fast, free, mobile-first web app with four connected features:
 1. **Universal unit converter** — a natural-language command bar ("100 km to miles") plus a converter card with custom dropdowns and live results across 18 measurement categories.
 2. **Scientific + graphing calculator** — an original calculator (Calc + Graph tabs) opened in a modal from anywhere, or as a standalone page.
 3. **AI Study Helper** — an educational-only Q&A box that returns factual answers with clean, ad-free sources.
@@ -26,7 +26,7 @@ The prototype intentionally uses **front-end mocks** for things that require a b
 ## File map
 | File | Type | Responsibility |
 |---|---|---|
-| `itconverts.html` | Main app (was `direction-bold.html`) | The whole site: header, command bar, converter card, AI study helper, browse pills, donate/account/history modals, reserved ad slot. Inline `<style>` + inline `<script>` (IIFE). |
+| `Karo Convert.html` | Main app (was `direction-bold.html`) | The whole site: header, command bar, converter card, AI study helper, browse pills, donate/account/history modals, reserved ad slot. Inline `<style>` + inline `<script>` (IIFE). |
 | `calculator.html` | Standalone page | Scientific + graphing calculator. Loaded into a modal by `calc-modal.js`, or usable on its own. |
 | `convert.js` | Logic (no deps) | `window.ITC` — all categories, `convert()`, `convertString()`, `format()`. Pure data + functions; port directly. |
 | `mathcore.js` | Logic (no deps) | `window.MATH.evaluate(expr, {deg, vars, ans})` — safe recursive-descent expression parser (no `eval`). Used by the calculator. |
@@ -34,7 +34,7 @@ The prototype intentionally uses **front-end mocks** for things that require a b
 | `supporter.js` | **MOCK — replace** | `window.ITC_USER` — identity, supporter status, and activity history, persisted to `localStorage`. This is the seam where real auth/payments/history go. |
 | `calc-modal.js` | Shared widget | Injects the calculator modal (iframe → `calculator.html`); any `[data-open-calc]` element opens it. Listens for a `postMessage` from the calculator to grow the modal in Graph mode. |
 
-Load order in `itconverts.html`: `convert.js` → `icons.js` → `supporter.js` → `calc-modal.js` → inline app script.
+Load order in `Karo Convert.html`: `convert.js` → `icons.js` → `supporter.js` → `calc-modal.js` → inline app script.
 Load order in `calculator.html`: `mathcore.js` → `supporter.js` → inline calculator script.
 
 ---
@@ -92,7 +92,7 @@ Theme is toggled by setting `data-theme="light"|"dark"` on `<html>`; persisted i
 
 ## Screens / views & components
 
-### 1. Header (sticky top of `itconverts.html`)
+### 1. Header (sticky top of `Karo Convert.html`)
 - Left: **brand** "it**converts**" (the "it" in text color, "converts" in `--accent`), with a 30px rounded coral chip showing a "⇄" glyph; the chip rotates 180° on hover.
 - Right cluster (flex, gap 10px): **Calculator** button (`.calcbtn`, accent-outlined pill, opens calculator modal via `data-open-calc`; a 3-pulse "nudge" animation on load), an **account control** (`#acctwrap`, see Supporter), and a **theme toggle** (`.tbtn`, sun/moon).
 - ≤430px: button text labels hide, leaving icons.
@@ -136,7 +136,7 @@ Theme is toggled by setting `data-theme="light"|"dark"` on `<html>`; persisted i
 
 ## Interactions & behavior (logic to replicate)
 
-### Natural-language parsing (`itconverts.html` `parse()` + `resolve()`)
+### Natural-language parsing (`Karo Convert.html` `parse()` + `resolve()`)
 - Extracts the first number, splits the rest on `to` / `in` / `-`/`–`/`>`.
 - `resolve(token)` matches a unit by id, symbol, or name-prefix across all categories, with an alias map (`lbs→lb`, `miles→mi`, `celsius→c`, `cups→cup`, etc.).
 - If both sides resolve to the same category → set up that conversion; if different categories → friendly error; if only one resolves → open that category; else try category name; else error.
@@ -151,7 +151,7 @@ Theme is toggled by setting `data-theme="light"|"dark"` on `<html>`; persisted i
 - `ASK_PROMPT` (in the file) instructs: answer ONLY educational/academic topics; refuse anything else (shopping, gossip, personal/medical/legal advice, opinions, NSFW, harmful) with a friendly redirect; ONLY factual info; recommend 2–4 reputable ad-free sources from an allowlist; output strict minified JSON `{educational, topic, answer, sources[], refusal}`.
 - Client parses the JSON, and **`validSource()` independently filters** sources to an allowlist (`wikipedia.org, khanacademy.org, britannica.com, *.edu, *.gov, nasa.gov, noaa.gov, si.edu, bbc.co.uk, mit.edu`) — defense-in-depth so ad/commercial links can never render even if the model misbehaves.
 
-### Supporter / account / history (`supporter.js` + `itconverts.html`)
+### Supporter / account / history (`supporter.js` + `Karo Convert.html`)
 - **`window.ITC_USER`**: `current()`, `isSupporter()`, `signIn(provider, {plan,name,email})`, `signOut()`, `log({t,label,detail})`, `history()`, `clearHistory()`, `subscribe(fn)`. State persists to `localStorage` (`itc-user`, `itc-history`) and syncs across tabs/iframes via the `storage` event.
 - **Donate modal** (`#ov-support`): perks list, plan choice (**$1** or **Custom** with an amount field), then **Continue with Google / Apple / Microsoft** buttons that call `signIn` (the mock immediately marks the user a supporter).
 - On sign-in: modal closes, `applyAds()` hides `.promo-area`, header swaps the "Go ad-free" button for an **avatar** with a menu (name, email, "Ad-free · $N donor" badge, **Your history**, **Sign out**).
@@ -197,11 +197,11 @@ Theme is toggled by setting `data-theme="light"|"dark"` on `<html>`; persisted i
 ---
 
 ## Files in this bundle
-- `itconverts.html` — main app (rename of the prototype `direction-bold.html`)
+- `Karo Convert.html` — main app (rename of the prototype `direction-bold.html`)
 - `calculator.html` — calculator
 - `convert.js`, `mathcore.js`, `icons.js` — portable logic
 - `supporter.js` — mock identity/supporter/history (replace per task 1, 2, 4)
 - `calc-modal.js` — calculator modal launcher
 - `README.md` — this document
 
-Open `itconverts.html` in a browser to interact with the full prototype. The AI Study Helper only responds inside the original preview environment (it relies on a built-in `window.claude` helper); in your build, point it at your own AI endpoint.
+Open `Karo Convert.html` in a browser to interact with the full prototype. The AI Study Helper only responds inside the original preview environment (it relies on a built-in `window.claude` helper); in your build, point it at your own AI endpoint.

@@ -1,4 +1,4 @@
-/* itconverts — site.js : shared chrome behaviour for standalone pages.
+/* Karo Convert — site.js : shared chrome behaviour for standalone pages.
  * Theme toggle persists to the same key the app uses (itc-theme-c), so the
  * dark/light choice carries between the app and the content pages. */
 (function () {

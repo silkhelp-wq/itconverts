@@ -1,4 +1,4 @@
-/* itconverts — ads.js
+/* Karo Convert — ads.js
  * Drops Google AdSense into the EXISTING reserved slot (.promo-area > .promo-unit)
  * without renaming the class (ad-blockers collapse elements literally named
  * "ad/ads/advert", which would break layout — the README calls this out).
@@ -8,7 +8,7 @@
  *   - Everyone else gets one responsive display unit.
  *   - It reacts live to entitlement changes (pay -> ads vanish instantly).
  *
- * Setup: put your IDs in ITC_CONFIG (see the <head> of itconverts.html):
+ * Setup: put your IDs in ITC_CONFIG (see the <head> of Karo Convert.html):
  *   window.ITC_CONFIG = { ADSENSE_CLIENT:'ca-pub-XXXXXXXXXXXXXXXX', ADSENSE_SLOT:'1234567890', ... }
  */
 (function (g) {

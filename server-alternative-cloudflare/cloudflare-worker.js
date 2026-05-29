@@ -63,13 +63,13 @@ export default {
           price_data: {
             currency: 'usd',
             unit_amount: amount,
-            product_data: { name: 'itconverts — Go ad-free' }
+            product_data: { name: 'Karo Convert — Go ad-free' }
           }
         }],
         customer_email: body.email || undefined,
         success_url: body.success_url || (url.origin + '/?paid=1&session_id={CHECKOUT_SESSION_ID}'),
         cancel_url: body.cancel_url || (url.origin + '/?paid=0'),
-        'metadata[product]': 'itconverts-adfree'
+        'metadata[product]': 'Karo Convert-adfree'
       });
       if (session && session.url) return json({ url: session.url, id: session.id }, env);
       return json({ error: 'could-not-create-session' }, env, 500);

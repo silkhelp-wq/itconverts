@@ -1,4 +1,4 @@
-/* itconverts — saved.js   (window.ITC_SAVED)
+/* Karo Convert — saved.js   (window.ITC_SAVED)
  * Device-local "save this search for later". No account, no server, no cost —
  * stored in this browser only (localStorage). Available to EVERYONE, signed in
  * or not, donor or not. (Cross-device sync would need real accounts + a database;

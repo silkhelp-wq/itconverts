@@ -1,4 +1,4 @@
-/* itconverts — supporter.js
+/* Karo Convert — supporter.js
  * Lightweight identity + supporter state + activity history, persisted to
  * localStorage so it survives reloads and is shared across same-origin pages
  * (main site + calculator iframe). This is a front-end MOCK of social sign-in;

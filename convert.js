@@ -1,4 +1,4 @@
-/* itconverts — shared conversion engine (no dependencies, ES2015)
+/* Karo Convert — shared conversion engine (no dependencies, ES2015)
  * Exposes a global: window.ITC
  * Linear units declare a `factor` (value-in-base = value * factor).
  * Non-linear categories (temperature, fuel economy, numeric base)

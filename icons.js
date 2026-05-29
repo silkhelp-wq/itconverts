@@ -1,4 +1,4 @@
-/* itconverts — minimal geometric line-icon set. window.ITCICON(name) -> svg string.
+/* Karo Convert — minimal geometric line-icon set. window.ITCICON(name) -> svg string.
  * 24x24, 1.6 stroke, currentColor. Intentionally simple. */
 (function (global) {
   'use strict';

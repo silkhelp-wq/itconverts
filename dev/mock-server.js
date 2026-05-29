@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const ROOT = path.join(__dirname, '..');           // itconverts-build/
+const ROOT = path.join(__dirname, '..');           // Karo Convert-build/
 const PAID_ID = 'cs_test_mock_123';                  // pretend this session is paid
 const TYPES = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css' };
 
@@ -36,7 +36,7 @@ const server = http.createServer((req, res) => {
   }
 
   // --- static files ---
-  let p = u.pathname === '/' ? '/itconverts.html' : u.pathname;
+  let p = u.pathname === '/' ? '/Karo Convert.html' : u.pathname;
   const fp = path.join(ROOT, p);
   if (!fp.startsWith(ROOT) || !fs.existsSync(fp)) return send(res, 404, 'not found');
   let data = fs.readFileSync(fp);

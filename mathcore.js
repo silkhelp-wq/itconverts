@@ -1,4 +1,4 @@
-/* itconverts — mathcore.js
+/* Karo Convert — mathcore.js
  * A small, safe recursive-descent expression evaluator (no eval()).
  * window.MATH.evaluate(expr, {deg:Boolean, vars:{x:..}, ans:..}) -> Number (throws on error)
  * Supports: + - * / ^, unary +/-, parentheses, implicit multiply (2pi, 3(4)),

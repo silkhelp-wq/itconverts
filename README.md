@@ -1,4 +1,4 @@
-# itconverts
+# Karo Convert
 
 A fast, free, mobile-first web app for students:
 
@@ -49,7 +49,7 @@ dev/                           # the content generator + the automated test harn
 Full step-by-step (and the honest revenue math) is in **MONETIZATION.md**.
 
 ## Before you publish — edit these placeholders
-- `SITE` domain in `sitemap.xml` and `robots.txt` (currently `itconverts.example`).
+- `SITE` domain in `sitemap.xml` and `robots.txt` (currently `karoconvert.com`).
 - Contact email in `contact.html`.
 - Owner name + "Last updated" date in `privacy.html` and `terms.html`.
 - The privacy/terms pages are starting templates, **not legal advice** — review for

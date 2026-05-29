@@ -2,7 +2,7 @@
   "name": "karo-convert",
   "version": "1.0.0",
   "private": true,
-  "description": "itconverts — a free unit converter, scientific/graphing calculator, and curated educational search for students. Static site + Stripe serverless ad-free flow.",
+  "description": "Karo Convert — a free unit converter, scientific/graphing calculator, and curated educational search for students. Static site + Stripe serverless ad-free flow.",
   "license": "UNLICENSED",
   "dependencies": {
     "stripe": "^17.0.0"

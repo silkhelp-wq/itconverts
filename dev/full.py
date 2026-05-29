@@ -1,7 +1,7 @@
 import json, sys, threading, time, http.server, socketserver, os, urllib.parse
 from playwright.sync_api import sync_playwright
 
-ROOT = "/home/claude/itconverts-build"
+ROOT = "/home/claude/Karo Convert-build"
 PORT = 8801
 PAID_ID = "cs_test_mock_123"
 
@@ -18,7 +18,7 @@ class H(http.server.SimpleHTTPRequestHandler):
         if u.path == "/api/verify-session":
             q = urllib.parse.parse_qs(u.query); paid = q.get("session_id",[""])[0] == PAID_ID
             return self._json({"supporter":paid, "plan":"$1 supporter" if paid else ""})
-        path = "/itconverts.html" if u.path == "/" else u.path
+        path = "/Karo Convert.html" if u.path == "/" else u.path
         fp = os.path.join(ROOT, path.lstrip("/"))
         if not os.path.isfile(fp): self.send_response(404); self.end_headers(); return
         data = open(fp,"rb").read()

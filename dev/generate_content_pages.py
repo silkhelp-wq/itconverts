@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # build_pages.py — authoring tool (NOT a runtime dep). Emits plain static HTML
-# pages into itconverts-build/ and itconverts-build/guides/.
+# pages into Karo Convert-build/ and Karo Convert-build/guides/.
 import os, json, html
-OUT = "/home/claude/itconverts-build"
-SITE = "https://itconverts.example"   # <-- replace with your real domain before deploy
+OUT = "/home/claude/Karo Convert-build"
+SITE = "https://karoconvert.com"   # <-- replace with your real domain before deploy
 
 def assets(depth):  # relative prefix from page to root
     return "../" * depth
@@ -35,9 +35,9 @@ def header(depth, active=""):
     p = assets(depth)
     def cls(name): return "navlink active" if name == active else "navlink"
     return f"""<header><div class="hwrap">
-  <a class="brand" href="{p}itconverts.html"><span class="b">⇄</span> it<em>converts</em></a>
+  <a class="brand" href="{p}Karo Convert.html"><span class="b">⇄</span> Karo <em>Convert</em></a>
   <nav class="hnav">
-    <a class="{cls('converter')}" href="{p}itconverts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l-3 3 3 3M4 13h13M17 14l3-3-3-3M20 11H7"/></svg><span class="lbl">Converter</span></a>
+    <a class="{cls('converter')}" href="{p}Karo Convert.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l-3 3 3 3M4 13h13M17 14l3-3-3-3M20 11H7"/></svg><span class="lbl">Converter</span></a>
     <a class="{cls('guides')}" href="{p}guides/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4z"/><path d="M20 5h-1a3 3 0 0 0-3 3v11"/></svg><span class="lbl">Guides</span></a>
     <a class="{cls('writing')}" href="{p}writing/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span class="lbl">Writing</span></a>
     <button class="tbtn" id="theme" aria-label="Toggle theme"></button>
@@ -52,14 +52,14 @@ def footer(depth):
     return f"""{promo()}
 <footer><div class="footcol">
   <div class="footlinks">
-    <a href="{p}itconverts.html">Converter</a>
+    <a href="{p}Karo Convert.html">Converter</a>
     <a href="{p}guides/">Conversion guides</a>
     <a href="{p}about.html">About</a>
     <a href="{p}privacy.html">Privacy</a>
     <a href="{p}terms.html">Terms</a>
     <a href="{p}contact.html">Contact</a>
   </div>
-  <div class="footnote">© <span id="yr"></span> itconverts — type anything, convert everything. A free tool for students everywhere. itconverts is not affiliated with the Wikimedia Foundation; study results link to Wikimedia projects under their respective licenses.</div>
+  <div class="footnote">© <span id="yr"></span> Karo Convert — type anything, convert everything. A free tool for students everywhere. Karo Convert is not affiliated with the Wikimedia Foundation; study results link to Wikimedia projects under their respective licenses.</div>
 </div></footer>
 <script src="{p}payments.js"></script>
 <script src="{p}ads.js"></script>
@@ -84,7 +84,7 @@ def crumb(items):  # [(label, href|None)]
 def cta(depth, msg="Try it now", sub="Convert anything in plain language — no menus, just type."):
     p = assets(depth)
     return f"""<div class="cta-box"><div class="t">{html.escape(msg)}<span>{html.escape(sub)}</span></div>
-<a class="btn" href="{p}itconverts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg> Open converter</a></div>"""
+<a class="btn" href="{p}Karo Convert.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg> Open converter</a></div>"""
 
 def faq_block(qa):
     items = "".join(f'<details><summary>{html.escape(q)}</summary><div class="ans">{a}</div></details>' for q, a in qa)
@@ -94,22 +94,22 @@ def jsonld(*objs):
     return "".join(f'<script type="application/ld+json">{json.dumps(o)}</script>\n' for o in objs)
 
 def article_ld(name, desc, url):
-    return {"@context":"https://schema.org","@type":"Article","headline":name,"description":desc,"mainEntityOfPage":url,"inLanguage":"en","publisher":{"@type":"Organization","name":"itconverts"}}
+    return {"@context":"https://schema.org","@type":"Article","headline":name,"description":desc,"mainEntityOfPage":url,"inLanguage":"en","publisher":{"@type":"Organization","name":"Karo Convert"}}
 def faq_ld(qa):
     return {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":strip(a)}} for q,a in qa]}
 def strip(s):
     import re; return re.sub(r"<[^>]+>","",s)
 
 # ============================== TRUST PAGES ==============================
-write("about.html", "About itconverts — a free converter & study tool for students",
-  "itconverts is a fast, free, mobile-first unit converter, scientific calculator and educational search built for students of all ages, anywhere in the world.",
-  f"""{crumb([("Home","itconverts.html"),("About",None)])}
+write("about.html", "About Karo Convert — a free converter & study tool for students",
+  "Karo Convert is a fast, free, mobile-first unit converter, scientific calculator and educational search built for students of all ages, anywhere in the world.",
+  f"""{crumb([("Home","Karo Convert.html"),("About",None)])}
 <div class="page">
 <div class="kicker">About</div>
 <h1>A fast, free tool — built for students.</h1>
-<p class="lede">itconverts turns everyday questions into instant answers: convert any units in plain language, run a scientific or graphing calculator, and search trusted educational sources — all on one quiet, fast page.</p>
+<p class="lede">Karo Convert turns everyday questions into instant answers: convert any units in plain language, run a scientific or graphing calculator, and search trusted educational sources — all on one quiet, fast page.</p>
 <hr class="rule">
-<h2>What itconverts does</h2>
+<h2>What Karo Convert does</h2>
 <p>Three connected tools, no sign-up required:</p>
 <ul>
 <li><strong>Universal converter.</strong> Type something like <em>“100 km to miles”</em> or <em>“350 F to C”</em> and get the answer immediately. It covers length, mass, temperature, area, volume, speed, time, digital storage, energy, power, pressure, fuel economy, angle, frequency, force, data rate and number bases.</li>
@@ -119,7 +119,7 @@ write("about.html", "About itconverts — a free converter & study tool for stud
 <h2>Who it’s for</h2>
 <p>Students of every age, and anyone who needs a quick, reliable answer: a pupil checking homework, a home cook converting a recipe, a traveller reading road signs, a developer sizing a file. Because the study search uses sources that exist in hundreds of languages, it’s designed to be useful anywhere in the world.</p>
 <h2>How it stays free</h2>
-<p>The tools are built to cost almost nothing to run, so they can stay free for everyone. Two slim, clearly-labeled ad slots help cover the bills. If you’d rather not see them, a one-time donation removes ads on your device — that’s a thank-you, and it helps keep itconverts free for the students who rely on it.</p>
+<p>The tools are built to cost almost nothing to run, so they can stay free for everyone. Two slim, clearly-labeled ad slots help cover the bills. If you’d rather not see them, a one-time donation removes ads on your device — that’s a thank-you, and it helps keep Karo Convert free for the students who rely on it.</p>
 <h2>What we care about</h2>
 <ul>
 <li><strong>Accuracy.</strong> Conversions use exact, documented factors; the guides show the formulas so you can check the math yourself.</li>
@@ -128,15 +128,15 @@ write("about.html", "About itconverts — a free converter & study tool for stud
 </ul>
 </div>
 {cta(0)}""", 0,
-  jsonld({"@context":"https://schema.org","@type":"AboutPage","name":"About itconverts","url":f"{SITE}/about.html"}))
+  jsonld({"@context":"https://schema.org","@type":"AboutPage","name":"About Karo Convert","url":f"{SITE}/about.html"}))
 
-write("privacy.html", "Privacy Policy — itconverts",
-  "How itconverts handles your data: what’s stored on your device, how payments and ads work, and the choices you have. A clear, plain-language privacy policy.",
-  f"""{crumb([("Home","itconverts.html"),("Privacy",None)])}
+write("privacy.html", "Privacy Policy — Karo Convert",
+  "How Karo Convert handles your data: what’s stored on your device, how payments and ads work, and the choices you have. A clear, plain-language privacy policy.",
+  f"""{crumb([("Home","Karo Convert.html"),("Privacy",None)])}
 <div class="page">
 <div class="kicker">Privacy</div>
 <h1>Privacy Policy</h1>
-<p class="lede">Plain language, because privacy shouldn’t need a law degree. itconverts is built to collect as little as possible.</p>
+<p class="lede">Plain language, because privacy shouldn’t need a law degree. Karo Convert is built to collect as little as possible.</p>
 <p class="small muted"><strong>Last updated:</strong> [add date] · <strong>Owner:</strong> [your name / business] · This page is a starting template, not legal advice — review it for your jurisdiction before publishing.</p>
 <hr class="rule">
 <h2>The short version</h2>
@@ -164,7 +164,7 @@ write("privacy.html", "Privacy Policy — itconverts",
 <p>This site does not run its own analytics cookies by default. If you add an analytics tool, update this section to describe it.</p>
 
 <h2>Children</h2>
-<p>itconverts is intended to be safe for students of all ages. We do not knowingly collect personal information from anyone, including children — the tools work without entering any personal details. Please don’t type personal information into the search box. If you believe a child has provided personal data, contact us and we’ll remove it.</p>
+<p>Karo Convert is intended to be safe for students of all ages. We do not knowingly collect personal information from anyone, including children — the tools work without entering any personal details. Please don’t type personal information into the search box. If you believe a child has provided personal data, contact us and we’ll remove it.</p>
 
 <h2>Your choices</h2>
 <ul>
@@ -180,34 +180,34 @@ write("privacy.html", "Privacy Policy — itconverts",
 <p>Questions about privacy? See our <a href="contact.html">Contact page</a>.</p>
 </div>""", 0)
 
-write("terms.html", "Terms of Use — itconverts",
-  "The terms for using itconverts: acceptable use, accuracy disclaimers, donations, third-party links and liability. Plain-language terms of use.",
-  f"""{crumb([("Home","itconverts.html"),("Terms",None)])}
+write("terms.html", "Terms of Use — Karo Convert",
+  "The terms for using Karo Convert: acceptable use, accuracy disclaimers, donations, third-party links and liability. Plain-language terms of use.",
+  f"""{crumb([("Home","Karo Convert.html"),("Terms",None)])}
 <div class="page">
 <div class="kicker">Terms</div>
 <h1>Terms of Use</h1>
-<p class="lede">The ground rules for using itconverts. By using the site, you agree to these terms.</p>
+<p class="lede">The ground rules for using Karo Convert. By using the site, you agree to these terms.</p>
 <p class="small muted"><strong>Last updated:</strong> [add date] · This is a starting template, not legal advice — review it for your jurisdiction before publishing.</p>
 <hr class="rule">
 <h2>Use of the service</h2>
-<p>itconverts is provided for general, personal and educational use, free of charge. You may use it as much as you like. Please don’t misuse it — for example by attempting to break it, overload it, scrape it at scale, or use it for anything unlawful.</p>
+<p>Karo Convert is provided for general, personal and educational use, free of charge. You may use it as much as you like. Please don’t misuse it — for example by attempting to break it, overload it, scrape it at scale, or use it for anything unlawful.</p>
 <h2>Accuracy &amp; “as is”</h2>
-<p>We work hard to keep conversions and calculations accurate, and we publish the formulas so you can verify them. Even so, the service is provided <strong>“as is”, without warranties of any kind</strong>. Results may contain errors or rounding, and unit definitions can vary by region. <strong>Do not rely on itconverts for decisions where an error could cause harm or loss</strong> — including medical, financial, legal, structural, scientific or other professional contexts. Always double-check critical figures with an authoritative source.</p>
+<p>We work hard to keep conversions and calculations accurate, and we publish the formulas so you can verify them. Even so, the service is provided <strong>“as is”, without warranties of any kind</strong>. Results may contain errors or rounding, and unit definitions can vary by region. <strong>Do not rely on Karo Convert for decisions where an error could cause harm or loss</strong> — including medical, financial, legal, structural, scientific or other professional contexts. Always double-check critical figures with an authoritative source.</p>
 <h2>Study search &amp; third-party links</h2>
 <p>Study results and other outbound links point to third-party sites (such as Wikimedia projects). We don’t control and aren’t responsible for their content. Linked content is owned by its respective authors and provided under its own licenses.</p>
 <h2>Donations</h2>
 <p>Donations are a <strong>voluntary, one-time contribution</strong> to support the site, processed by Stripe. As a thank-you, donating removes ads on your device. Donations are generally non-refundable; if something went wrong with a payment, contact us and we’ll try to help.</p>
 <h2>Limitation of liability</h2>
-<p>To the fullest extent permitted by law, itconverts and its operator are not liable for any damages arising from your use of, or inability to use, the service.</p>
+<p>To the fullest extent permitted by law, Karo Convert and its operator are not liable for any damages arising from your use of, or inability to use, the service.</p>
 <h2>Changes</h2>
 <p>We may update these terms; continued use after changes means you accept them.</p>
 <h2>Contact</h2>
 <p>See our <a href="contact.html">Contact page</a>.</p>
 </div>""", 0)
 
-write("contact.html", "Contact itconverts",
-  "Get in touch with itconverts — questions, feedback, corrections, or a bug report. We read every message.",
-  f"""{crumb([("Home","itconverts.html"),("Contact",None)])}
+write("contact.html", "Contact Karo Convert",
+  "Get in touch with Karo Convert — questions, feedback, corrections, or a bug report. We read every message.",
+  f"""{crumb([("Home","Karo Convert.html"),("Contact",None)])}
 <div class="page">
 <div class="kicker">Contact</div>
 <h1>Get in touch</h1>
@@ -215,7 +215,7 @@ write("contact.html", "Contact itconverts",
 <hr class="rule">
 <div class="callout">
 <div class="lbl">Email</div>
-<p style="margin:0"><a href="mailto:hello@itconverts.example">hello@itconverts.example</a> &nbsp;<span class="small muted">(replace with your real address)</span></p>
+<p style="margin:0"><a href="mailto:hello@karoconvert.com">hello@karoconvert.com</a> &nbsp;<span class="small muted">(replace with your real address)</span></p>
 </div>
 <p>A few things that help us help you faster:</p>
 <ul>
@@ -249,9 +249,9 @@ ICONS = {
 def gicon(k): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{ICONS[k]}</svg>'
 
 cards = "".join(f"""<a class="card" href="{slug}"><div class="ic">{gicon(ic)}</div><h3>{html.escape(t)}</h3><p>{html.escape(d)}</p></a>""" for slug,ic,t,d in GUIDES)
-write("guides/index.html", "Conversion guides — clear explanations & reference tables | itconverts",
+write("guides/index.html", "Conversion guides — clear explanations & reference tables | Karo Convert",
   "Step-by-step conversion guides with exact formulas, worked examples and quick-reference tables: km to miles, Celsius to Fahrenheit, kg to pounds, data units and more.",
-  f"""{crumb([("Home","../itconverts.html"),("Guides",None)])}
+  f"""{crumb([("Home","../Karo Convert.html"),("Guides",None)])}
 <div class="page">
 <div class="kicker">Guides</div>
 <h1>Conversion guides</h1>
@@ -275,7 +275,7 @@ qa = [
  ("How far is a 5K in miles?","A 5-kilometre run is about <strong>3.11 miles</strong> (5 × 0.621371). A 10K is about 6.21 miles."),
  ("Is a marathon really 26.2 miles?","Yes — a marathon is 42.195 km, which is 26.219 miles, almost always written as 26.2.")
 ]
-body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Kilometers to miles",None)])}
+body = f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Kilometers to miles",None)])}
 <article class="article">
 <div class="kicker">Length</div>
 <h1>Kilometers to miles: the simple conversion</h1>
@@ -304,7 +304,7 @@ body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Kilometers to
 {faq_block(qa)}
 </article>
 {cta(1, "Convert any distance instantly", "Type “50 miles to km” or any other units.")}"""
-write("guides/km-to-miles.html","Kilometers to miles — exact formula, table & examples | itconverts",
+write("guides/km-to-miles.html","Kilometers to miles — exact formula, table & examples | Karo Convert",
   "Convert kilometers to miles with the exact factor (0.621371), the reverse formula, worked examples and a quick-reference table including 5K, 10K and marathon distances.",
   body, 1, jsonld(article_ld("Kilometers to miles","Convert km to miles with the exact formula and a reference table.",f"{SITE}/guides/km-to-miles.html"), faq_ld(qa)))
 
@@ -315,7 +315,7 @@ qa = [
  ("What is 98.6°F in Celsius?","About <strong>37°C</strong>, the usual figure for normal human body temperature."),
  ("What oven temperature is 180°C?","<strong>356°F</strong> — most recipes round it to 350°F, a very common baking temperature.")
 ]
-body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Celsius to Fahrenheit",None)])}
+body = f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Celsius to Fahrenheit",None)])}
 <article class="article">
 <div class="kicker">Temperature</div>
 <h1>Celsius to Fahrenheit, made clear</h1>
@@ -342,7 +342,7 @@ body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Celsius to Fa
 {faq_block(qa)}
 </article>
 {cta(1, "Convert any temperature", "Try “100 C to F” or “fever 38.5 C to F”.")}"""
-write("guides/celsius-to-fahrenheit.html","Celsius to Fahrenheit — formula, oven temps & examples | itconverts",
+write("guides/celsius-to-fahrenheit.html","Celsius to Fahrenheit — formula, oven temps & examples | Karo Convert",
   "Convert Celsius to Fahrenheit with the formula °F = °C × 9/5 + 32, key reference points (freezing, body temp, boiling), oven temperatures and worked examples.",
   body, 1, jsonld(article_ld("Celsius to Fahrenheit","Convert °C to °F with the formula and reference points.",f"{SITE}/guides/celsius-to-fahrenheit.html"), faq_ld(qa)))
 
@@ -353,7 +353,7 @@ qa = [
  ("How do stones fit in?","In the UK, body weight is often given in stone: <strong>1 stone = 14 pounds = 6.35 kg</strong>. So 70 kg ≈ 11 stone 0.3 lb."),
  ("What’s the airline luggage limit of 23 kg in pounds?","About <strong>50.7 lb</strong> — which is why many airlines quote a 50 lb limit.")
 ]
-body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Kilograms to pounds",None)])}
+body = f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Kilograms to pounds",None)])}
 <article class="article">
 <div class="kicker">Mass &amp; weight</div>
 <h1>Kilograms to pounds (and stone)</h1>
@@ -382,7 +382,7 @@ body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Kilograms to 
 {faq_block(qa)}
 </article>
 {cta(1, "Convert any weight", "Try “150 lb to kg” or “2.5 kg to oz”.")}"""
-write("guides/kg-to-pounds.html","Kilograms to pounds — exact formula, table & stone | itconverts",
+write("guides/kg-to-pounds.html","Kilograms to pounds — exact formula, table & stone | Karo Convert",
   "Convert kilograms to pounds with the exact factor (2.20462), a reference table, stone conversions and everyday examples like body weight and luggage limits.",
   body, 1, jsonld(article_ld("Kilograms to pounds","Convert kg to lb with the exact formula and a reference table.",f"{SITE}/guides/kg-to-pounds.html"), faq_ld(qa)))
 
@@ -393,7 +393,7 @@ qa = [
  ("Why is my internet ‘100 Mbps’ but downloads show ~12 MB/s?","Because 100 megabits ÷ 8 = <strong>12.5 megabytes</strong> per second. Speeds are in bits, file sizes in bytes — divide by 8 to compare."),
  ("Should I use MB or MiB?","Use <strong>MB</strong> (decimal, 1000-based) for general and marketing contexts, and <strong>MiB</strong> (binary, 1024-based) when you need the exact memory/OS figure.")
 ]
-body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Data units explained",None)])}
+body = f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Data units explained",None)])}
 <article class="article">
 <div class="kicker">Digital storage</div>
 <h1>Data units explained: KB, MB, GB and TB</h1>
@@ -417,19 +417,19 @@ body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Data units ex
 
 {faq_block(qa)}
 </article>
-{cta(1, "Convert any data size", "itconverts supports both SI and binary — try “5 GB to MB” or “1 TiB to GB”.")}"""
-write("guides/data-storage-units-explained.html","Data units explained: KB, MB, GB, TB (decimal vs binary) | itconverts",
+{cta(1, "Convert any data size", "Karo Convert supports both SI and binary — try “5 GB to MB” or “1 TiB to GB”.")}"""
+write("guides/data-storage-units-explained.html","Data units explained: KB, MB, GB, TB (decimal vs binary) | Karo Convert",
   "Understand digital storage units: decimal (SI, ×1000) vs binary (IEC, ×1024), bits vs bytes, why a 1 TB drive shows ~931 GB, and how to convert Mbps to MB/s.",
   body, 1, jsonld(article_ld("Data units explained","KB, MB, GB, TB — decimal vs binary and bits vs bytes.",f"{SITE}/guides/data-storage-units-explained.html"), faq_ld(qa)))
 
 # ---- cups to ml ----
 qa = [
  ("How many ml in a cup?","It depends on the cup. A <strong>US customary cup is 236.6 ml</strong>, a <strong>metric cup is 250 ml</strong>, and a <strong>US ‘legal’ cup is 240 ml</strong> (used on nutrition labels)."),
- ("Which cup do US recipes use?","US recipes use the <strong>US customary cup, 236.6 ml</strong>. itconverts uses this value too, so a result like “2 cups = 473.18 ml” matches."),
+ ("Which cup do US recipes use?","US recipes use the <strong>US customary cup, 236.6 ml</strong>. Karo Convert uses this value too, so a result like “2 cups = 473.18 ml” matches."),
  ("How many ml in a tablespoon and teaspoon?","In the US system, <strong>1 tablespoon = 14.79 ml</strong> and <strong>1 teaspoon = 4.93 ml</strong>. There are 3 teaspoons in a tablespoon."),
  ("Do dry and liquid cups differ?","By volume they’re the same (a cup is a cup). The difference is in how you measure: level off dry ingredients, and read liquids at eye level.")
 ]
-body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Cups to milliliters",None)])}
+body = f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Cups to milliliters",None)])}
 <article class="article">
 <div class="kicker">Volume · cooking</div>
 <h1>Cups to milliliters (without the guesswork)</h1>
@@ -459,7 +459,7 @@ body = f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Cups to milli
 {faq_block(qa)}
 </article>
 {cta(1, "Convert any cooking amount", "Try “2 cups to ml”, “1 tbsp to ml” or “350 F to C”.")}"""
-write("guides/cups-to-milliliters.html","Cups to milliliters — US, metric & UK cups + tbsp/tsp | itconverts",
+write("guides/cups-to-milliliters.html","Cups to milliliters — US, metric & UK cups + tbsp/tsp | Karo Convert",
   "Convert cups to milliliters accurately: US customary (236.6 ml), US legal (240 ml), metric (250 ml) and UK cups, plus tablespoon and teaspoon conversions for cooking.",
   body, 1, jsonld(article_ld("Cups to milliliters","Convert cups to ml across US, metric and UK standards.",f"{SITE}/guides/cups-to-milliliters.html"), faq_ld(qa)))
 
@@ -468,9 +468,9 @@ qa=[("How many feet are in a metre?","One metre is about <strong>3.28084 feet</s
 ("How do I write metres as feet and inches?","Multiply metres by 3.28084 for total feet, then multiply the decimal part by 12 for inches. Example: 1.8 m = 5.905 ft → <strong>5 ft 11 in</strong>."),
 ("What is 6 feet in metres?","6 × 0.3048 = <strong>1.83 m</strong>."),
 ("Is the conversion exact?","Yes — since 1959 a foot is defined as exactly 0.3048 m, so 1 m = 1 ÷ 0.3048 = 3.28084 ft.")]
-write("guides/meters-to-feet.html","Meters to feet — exact formula, table & height examples | itconverts",
+write("guides/meters-to-feet.html","Meters to feet — exact formula, table & height examples | Karo Convert",
  "Convert meters to feet with the exact factor (3.28084), how to express metres as feet and inches, a reference table and everyday height examples.",
- f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Meters to feet",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Meters to feet",None)])}
 <article class="article"><div class="kicker">Length</div>
 <h1>Meters to feet (and feet + inches)</h1>
 <p class="lede">One metre is about 3.28 feet. Here’s the exact formula, how to convert to feet and inches, and a quick table.</p>
@@ -492,9 +492,9 @@ qa=[("How many centimetres are in an inch?","Exactly <strong>2.54 cm</strong>. T
 ("What is 5 ft 9 in in centimetres?","That’s 69 inches × 2.54 = <strong>175.3 cm</strong>."),
 ("How do I go from cm back to inches?","Multiply centimetres by <strong>0.393701</strong> (or divide by 2.54)."),
 ("How big is a 32-inch TV?","Its diagonal is 32 × 2.54 = <strong>81.3 cm</strong>.")]
-write("guides/inches-to-centimeters.html","Inches to centimeters — exact 2.54 cm formula & table | itconverts",
+write("guides/inches-to-centimeters.html","Inches to centimeters — exact 2.54 cm formula & table | Karo Convert",
  "Convert inches to centimeters with the exact factor (1 in = 2.54 cm), a reference table, and examples for height, screen sizes and paper.",
- f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Inches to centimeters",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Inches to centimeters",None)])}
 <article class="article"><div class="kicker">Length</div>
 <h1>Inches to centimeters</h1>
 <p class="lede">One inch is exactly 2.54 centimetres — one of the few conversions with no rounding at all.</p>
@@ -516,9 +516,9 @@ qa=[("How many litres are in a gallon?","It depends which gallon. A <strong>US g
 ("Why are US and UK gallons different?","They’re two separate historical standards. The US kept an older wine gallon; the UK redefined its gallon in 1824. Always check which one a figure uses."),
 ("Which gallon should I use?","For US fuel economy, recipes, or anything American, use the <strong>US gallon</strong>. The UK now mostly uses litres, but older figures may be imperial gallons."),
 ("How do I convert litres to US gallons?","Multiply litres by <strong>0.264172</strong> (or divide by 3.785).")]
-write("guides/liters-to-gallons.html","Liters to gallons — US vs imperial, formula & table | itconverts",
+write("guides/liters-to-gallons.html","Liters to gallons — US vs imperial, formula & table | Karo Convert",
  "Convert liters to gallons accurately: US gallon (3.785 L) vs UK imperial gallon (4.546 L), the formulas, a reference table and fuel examples.",
- f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Liters to gallons",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Liters to gallons",None)])}
 <article class="article"><div class="kicker">Volume</div>
 <h1>Liters to gallons: US vs imperial</h1>
 <p class="lede">There are two gallons, and they differ by about 20%. Use the right one or your numbers will be off.</p>
@@ -538,9 +538,9 @@ qa=[("How many grams are in an ounce?","One ounce (weight) is about <strong>28.3
 ("Is this the same as a fluid ounce?","No — be careful. A <strong>weight</strong> ounce (28.35 g) measures mass; a <strong>fluid</strong> ounce measures volume (about 29.6 ml in the US). They are different things."),
 ("What is 8 oz in grams?","8 × 28.349523 = <strong>226.8 g</strong> (about half a pound)."),
 ("How do I convert grams to ounces?","Multiply grams by <strong>0.035274</strong> (or divide by 28.35).")]
-write("guides/grams-to-ounces.html","Grams to ounces — weight conversion, formula & table | itconverts",
+write("guides/grams-to-ounces.html","Grams to ounces — weight conversion, formula & table | Karo Convert",
  "Convert grams to ounces (weight, not fluid ounces) with the exact factor, a kitchen-friendly reference table and worked examples.",
- f"""{crumb([("Home","../itconverts.html"),("Guides","./"),("Grams to ounces",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Guides","./"),("Grams to ounces",None)])}
 <article class="article"><div class="kicker">Mass &amp; weight</div>
 <h1>Grams to ounces</h1>
 <p class="lede">One ounce is about 28.35 grams. Just don’t confuse it with the fluid ounce — that measures volume, not weight.</p>
@@ -577,15 +577,15 @@ WRITING=[
 ]
 WICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>'
 wcards="".join(f"""<a class="card" href="{slug}"><div class="ic">{WICON}</div><h3>{html.escape(t)}</h3><p>{html.escape(d)}</p></a>""" for slug,t,d in WRITING)
-write("writing/index.html","Writing & citation guides for students | itconverts",
+write("writing/index.html","Writing & citation guides for students | Karo Convert",
  "Clear guides for student writing and research: how to cite sources in APA, MLA and Chicago, build a bibliography, write a thesis statement, structure a paper and avoid plagiarism.",
- f"""{crumb([("Home","../itconverts.html"),("Writing",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing",None)])}
 <div class="page"><div class="kicker">Writing &amp; citation</div>
 <h1>Writing &amp; citation guides</h1>
 <p class="lede">Practical help for term papers, essays and theses — how to cite your sources correctly, build a bibliography, sharpen a thesis statement, and write without plagiarising. Reflects the current editions: <strong>APA 7</strong>, <strong>MLA 9</strong> and <strong>Chicago 18</strong>.</p>
 </div>
 <div class="cards">{wcards}</div>
-<p class="study-note" style="margin-top:18px">Tip: use the <a href="../itconverts.html#ask">Study search</a> to find trusted, ad-free sources, then come back here to cite them correctly.</p>
+<p class="study-note" style="margin-top:18px">Tip: use the <a href="../Karo Convert.html#ask">Study search</a> to find trusted, ad-free sources, then come back here to cite them correctly.</p>
 {cta(1,"Need a quick fact or conversion?","The converter and study search are a tap away.")}""",1)
 
 WDISC='<hr class="rule"><p class="small muted">These guides explain the current editions in plain language and are a study aid, not official style manuals. For exact rules and edge cases, check your assignment brief and the official APA, MLA or Chicago guidance — and when in doubt, ask your instructor.</p>'
@@ -595,9 +595,9 @@ qa=[("Which citation style should I use?","Follow your assignment brief first. B
 ("Can I mix two styles in one paper?","No. Pick one and use it consistently — mixing styles is one of the most common reasons work gets marked down."),
 ("Is Chicago 17th still acceptable?","Chicago’s 18th edition (2024) is current, but many courses and journals still use the 17th. Use whichever your instructor or publisher specifies."),
 ("How do I cite AI tools like ChatGPT?","APA 7, MLA 9 and Chicago 18 all now give guidance for AI-generated content: name the tool as the source, give the version and date, and say how you used it. Always check your school’s own policy first.")]
-write("writing/citation-styles-explained.html","APA vs MLA vs Chicago vs Harvard — which to use (2026) | itconverts",
+write("writing/citation-styles-explained.html","APA vs MLA vs Chicago vs Harvard — which to use (2026) | Karo Convert",
  "Compare the main citation styles — APA 7, MLA 9, Chicago 18 and Harvard — with the disciplines that use each, in-text formats, and the same source shown side by side.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Citation styles explained",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Citation styles explained",None)])}
 <article class="article"><div class="kicker">Citation</div>
 <h1>APA vs MLA vs Chicago vs Harvard</h1>
 <p class="lede">Four common styles, four sets of rules. Here’s what each is for, how they differ, and the same source written in each.</p>
@@ -612,7 +612,7 @@ write("writing/citation-styles-explained.html","APA vs MLA vs Chicago vs Harvard
 <h2>How to choose</h2>
 <p>Check the assignment brief or syllabus first — it almost always names a style. If it doesn’t, use the discipline norm in the table above. Then be consistent from the first citation to the last.</p>
 {faq_block(qa)}{WDISC}</article>
-{cta(1,"Find sources to cite","Use the Study search for trusted, ad-free sources.","../itconverts.html#ask")}""".replace('href="../itconverts.html"><svg','href="../itconverts.html#ask"><svg') if False else f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Citation styles explained",None)])}
+{cta(1,"Find sources to cite","Use the Study search for trusted, ad-free sources.","../Karo Convert.html#ask")}""".replace('href="../Karo Convert.html"><svg','href="../Karo Convert.html#ask"><svg') if False else f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Citation styles explained",None)])}
 <article class="article"><div class="kicker">Citation</div>
 <h1>APA vs MLA vs Chicago vs Harvard</h1>
 <p class="lede">Four common styles, four sets of rules. Here’s what each is for, how they differ, and the same source written in each.</p>
@@ -635,9 +635,9 @@ qa=[("What if the website has no author?","Start with the title of the page inst
 ("What if there’s no date?","Use <strong>(n.d.)</strong> — “no date” — in APA. In MLA, simply give the access date at the end."),
 ("Do I need the access date?","MLA recommends an access date for pages that may change. APA only includes a retrieval date for content designed to change (like a live map or wiki)."),
 ("How do I cite a page with a long messy URL?","Use the clean, canonical link to the page itself. You don’t need tracking parameters after the “?”.")]
-write("writing/how-to-cite-a-website.html","How to cite a website — APA, MLA & Chicago examples | itconverts",
+write("writing/how-to-cite-a-website.html","How to cite a website — APA, MLA & Chicago examples | Karo Convert",
  "How to cite a website in APA 7, MLA 9 and Chicago 18, with examples and what to do when there is no author or no date.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Cite a website",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Cite a website",None)])}
 <article class="article"><div class="kicker">Citation</div>
 <h1>How to cite a website</h1>
 <p class="lede">Web pages are the most-cited — and most mis-cited — source. Here’s the format in three styles, plus how to handle a missing author or date.</p>
@@ -658,14 +658,14 @@ qa=[("Can I cite Wikipedia in an academic paper?","Often you shouldn’t use it 
 ("If I do cite Wikipedia, how?","Cite the specific article and, importantly, link the <strong>permanent version</strong> so the page can’t change under your reader (see below)."),
 ("How do I get a Wikipedia article’s permanent link?","Open the article’s <em>View history</em> (or “Cite this page”) and copy the link to the dated version. APA recommends using this archived URL."),
 ("Does Wikipedia have an author?","Articles are written collectively, so there’s no single author. Begin the citation with the article title instead.")]
-write("writing/how-to-cite-wikipedia.html","How to cite Wikipedia in APA & MLA (the right way) | itconverts",
+write("writing/how-to-cite-wikipedia.html","How to cite Wikipedia in APA & MLA (the right way) | Karo Convert",
  "Should you cite Wikipedia? How to do it properly in APA 7 and MLA 9, why you should link the permanent version, and the smarter way to use it for research.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Cite Wikipedia",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Cite Wikipedia",None)])}
 <article class="article"><div class="kicker">Citation</div>
 <h1>How to cite Wikipedia (properly)</h1>
 <p class="lede">First, a tip that will save your grade: use Wikipedia to <em>find</em> sources, then cite those. But if you do cite the article itself, here’s how to do it right.</p>
 <h2>The smarter approach</h2>
-<p>Encyclopedias — including Wikipedia — are usually <strong>background reading</strong>, not evidence. Scroll to the <strong>References</strong> at the bottom of any article: those are the books, papers and reports the article is built on. Read and cite <em>those</em> primary sources directly. (The <a href="../itconverts.html#ask">Study search</a> can help you find trusted sources to begin with.)</p>
+<p>Encyclopedias — including Wikipedia — are usually <strong>background reading</strong>, not evidence. Scroll to the <strong>References</strong> at the bottom of any article: those are the books, papers and reports the article is built on. Read and cite <em>those</em> primary sources directly. (The <a href="../Karo Convert.html#ask">Study search</a> can help you find trusted sources to begin with.)</p>
 <h2>If you cite the article anyway</h2>
 <p>Because anyone can edit Wikipedia, link the <strong>permanent version</strong> you actually read — open “View history” and copy the dated link. That way your reader sees the same text you did.</p>
 {cite("APA 7","Photosynthesis. (2024, March 5). In <em>Wikipedia</em>. https://en.wikipedia.org/w/index.php?title=Photosynthesis&amp;oldid=1212000000","In-text: <code>(“Photosynthesis,” 2024)</code>")}
@@ -681,9 +681,9 @@ qa=[("How do I cite a book with two or more authors?","APA lists up to 20 author
 ("How do I cite one chapter from an edited book?","Cite the chapter author and title, then “In [Editor] (Ed.), <em>Book title</em> (pages). Publisher.” (APA), adapting for MLA or Chicago."),
 ("Do I include the edition?","Yes, if it isn’t the first — e.g. “(3rd ed.)” in APA, “3rd ed.” in MLA, after the title."),
 ("Do I need the city of publication?","APA and MLA no longer require the city. Chicago still includes it.")]
-write("writing/how-to-cite-a-book.html","How to cite a book — APA, MLA & Chicago examples | itconverts",
+write("writing/how-to-cite-a-book.html","How to cite a book — APA, MLA & Chicago examples | Karo Convert",
  "How to cite a book in APA 7, MLA 9 and Chicago 18, including multiple authors, editions and chapters in an edited book.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Cite a book",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Cite a book",None)])}
 <article class="article"><div class="kicker">Citation</div>
 <h1>How to cite a book</h1>
 <p class="lede">The format that started it all. Here’s a book in three styles, plus the rules for editions and multiple authors.</p>
@@ -703,9 +703,9 @@ qa=[("What is a DOI and do I need it?","A DOI is a permanent link to an article 
 ("What if there’s no DOI?","Give the database name or a stable URL instead. For print-only articles, the volume, issue and page numbers are enough."),
 ("What do volume and issue mean?","Journals are published in numbered volumes (often one per year), each split into issues. Both appear in the citation, e.g. <em>vol. 12, no. 3</em>."),
 ("How do I shorten three or more authors?","APA uses “First Author et al.” in-text; MLA does the same in both the in-text citation and (for 3+) the Works Cited entry.")]
-write("writing/how-to-cite-a-journal-article.html","How to cite a journal article — APA, MLA, Chicago + DOI | itconverts",
+write("writing/how-to-cite-a-journal-article.html","How to cite a journal article — APA, MLA, Chicago + DOI | Karo Convert",
  "How to cite a journal article in APA 7, MLA 9 and Chicago 18, with the DOI explained and what to do when there isn’t one.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Cite a journal article",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Cite a journal article",None)])}
 <article class="article"><div class="kicker">Citation</div>
 <h1>How to cite a journal article</h1>
 <p class="lede">Scholarly articles are the gold-standard source — and they have a precise citation format. Here it is, with the DOI demystified.</p>
@@ -725,9 +725,9 @@ qa=[("Is a bibliography the same as a Works Cited?","Not quite. A <strong>Works 
 ("What is an annotated bibliography?","A bibliography where each entry is followed by a short paragraph (the annotation) summarising and evaluating the source."),
 ("What does APA call its list?","<strong>References</strong>. MLA calls it <strong>Works Cited</strong>; Chicago calls it a <strong>Bibliography</strong> (notes style) or <strong>Reference list</strong> (author-date)."),
 ("Do I list sources I read but didn’t cite?","In a Works Cited or References list, no — only cited works. In a full bibliography, you may.")]
-write("writing/bibliography-vs-works-cited-vs-references.html","Bibliography vs Works Cited vs References — the difference | itconverts",
+write("writing/bibliography-vs-works-cited-vs-references.html","Bibliography vs Works Cited vs References — the difference | Karo Convert",
  "Bibliography, Works Cited and References explained: what each source list is called in APA, MLA and Chicago, and the real difference between them.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Bibliography vs Works Cited",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Bibliography vs Works Cited",None)])}
 <article class="article"><div class="kicker">Citation</div>
 <h1>Bibliography vs Works Cited vs References</h1>
 <p class="lede">Three names for the list at the end of your paper — but they don’t mean exactly the same thing. Here’s the difference.</p>
@@ -747,9 +747,9 @@ qa=[("Where does the thesis statement go?","Usually at the <strong>end of your i
 ("How long should it be?","Normally one or two sentences. It should be specific enough to preview your whole argument, not a vague topic."),
 ("What’s the difference between a topic and a thesis?","A topic is what you’re writing about (“social media and sleep”). A thesis takes a <em>position</em> on it (“Evening social-media use harms teenage sleep by delaying melatonin release”)."),
 ("Can my thesis change as I write?","Yes — it’s normal to refine it once your research and argument take shape. Update the statement to match your final paper.")]
-write("writing/how-to-write-a-thesis-statement.html","How to write a thesis statement — formula & examples | itconverts",
+write("writing/how-to-write-a-thesis-statement.html","How to write a thesis statement — formula & examples | Karo Convert",
  "Write a strong thesis statement using a simple formula, with weak-vs-strong examples and the three main types (argumentative, analytical, expository).",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Thesis statement",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Thesis statement",None)])}
 <article class="article"><div class="kicker">Writing</div>
 <h1>How to write a thesis statement</h1>
 <p class="lede">Your thesis is the one sentence your whole paper defends. Here’s a formula, and the difference between a weak and a strong one.</p>
@@ -775,9 +775,9 @@ qa=[("What’s a basic research-paper structure?","Introduction (hook, backgroun
 ("How long should each part be?","As a rough guide, the introduction and conclusion are about 10% each, leaving roughly 80% for the body. Follow any length rules in your brief."),
 ("What goes in a body paragraph?","Start with a topic sentence, give evidence (with a citation), explain how it supports your thesis, then link to the next point."),
 ("Should I write the introduction first?","Many writers draft it last, once they know exactly what the paper argues. An outline first, though, always helps.")]
-write("writing/how-to-structure-a-research-paper.html","How to structure a research paper — outline & template | itconverts",
+write("writing/how-to-structure-a-research-paper.html","How to structure a research paper — outline & template | Karo Convert",
  "A clear structure for term papers and research papers: introduction with a thesis, evidence-based body paragraphs, a conclusion and references — with an outline you can reuse.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Structure a research paper",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Structure a research paper",None)])}
 <article class="article"><div class="kicker">Writing</div>
 <h1>How to structure a research paper</h1>
 <p class="lede">Most term papers follow the same skeleton. Get the structure right and the writing gets much easier.</p>
@@ -792,7 +792,7 @@ write("writing/how-to-structure-a-research-paper.html","How to structure a resea
 <h2>A reusable outline</h2>
 <div class="formula">I. Introduction → thesis<br>II. Point 1 → evidence + analysis<br>III. Point 2 → evidence + analysis<br>IV. Point 3 → evidence + analysis<br>V. Counterargument + response<br>VI. Conclusion<br>VII. References</div>
 <h2>Tips that save rewrites</h2>
-<p>Outline before you draft. Make sure every paragraph supports the thesis — if one doesn’t, cut it or fix the thesis. Cite as you write so you never lose a source, and keep one citation style throughout. When you need a fact or figure, the <a href="../itconverts.html">converter</a> and <a href="../itconverts.html#ask">Study search</a> are a tap away.</p>
+<p>Outline before you draft. Make sure every paragraph supports the thesis — if one doesn’t, cut it or fix the thesis. Cite as you write so you never lose a source, and keep one citation style throughout. When you need a fact or figure, the <a href="../Karo Convert.html">converter</a> and <a href="../Karo Convert.html#ask">Study search</a> are a tap away.</p>
 {faq_block(qa)}{WDISC}</article>
 {cta(1,"Start your research","Find trusted, ad-free sources with the Study search.")}""",1,
  jsonld(article_ld("How to structure a research paper","An outline and template for term papers.",f"{SITE}/writing/how-to-structure-a-research-paper.html"),faq_ld(qa)))
@@ -802,9 +802,9 @@ qa=[("What counts as plagiarism?","Using someone else’s words, ideas, data or 
 ("Do I cite when I paraphrase?","Yes. Putting an idea in your own words still requires a citation, because the idea isn’t yours. Only quoting needs quotation marks <em>and</em> a citation."),
 ("What is ‘common knowledge’ that I don’t cite?","Widely known, undisputed facts (e.g. “water boils at 100°C at sea level”). If it’s specific, surprising, or arguable, cite it."),
 ("Will paraphrasing avoid plagiarism on its own?","No — swapping a few words is “patchwriting” and still counts. True paraphrasing rewrites the idea fully <em>and</em> includes a citation.")]
-write("writing/how-to-avoid-plagiarism.html","How to avoid plagiarism — quote, paraphrase & cite | itconverts",
+write("writing/how-to-avoid-plagiarism.html","How to avoid plagiarism — quote, paraphrase & cite | Karo Convert",
  "Avoid plagiarism by knowing when to quote, paraphrase or summarise — and exactly when a citation is required, with the common-knowledge exception explained.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Avoid plagiarism",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Avoid plagiarism",None)])}
 <article class="article"><div class="kicker">Writing</div>
 <h1>How to avoid plagiarism</h1>
 <p class="lede">Most plagiarism is accidental — a missing citation or a too-close paraphrase. Here’s how to stay clear of it.</p>
@@ -828,9 +828,9 @@ qa=[("What makes a source credible?","Check who wrote it and their expertise, wh
 ("What’s the difference between primary and secondary sources?","A <strong>primary</strong> source is original or first-hand (data, a diary, an experiment, an artwork). A <strong>secondary</strong> source interprets or analyses primary ones (a review article, a textbook). Tertiary sources, like encyclopedias, summarise both."),
 ("Are scholarly sources always better?","For most academic work, peer-reviewed scholarly sources carry the most weight, but a reputable news outlet or government report can be exactly right depending on your question."),
 ("Is Wikipedia a reliable source?","It’s a great <em>starting point</em> to understand a topic and find references, but it’s tertiary — cite the primary and scholarly sources it points to instead.")]
-write("writing/how-to-evaluate-sources.html","How to evaluate sources — a credibility checklist | itconverts",
+write("writing/how-to-evaluate-sources.html","How to evaluate sources — a credibility checklist | Karo Convert",
  "Judge whether a source is credible with a simple checklist (currency, relevance, authority, accuracy, purpose), and learn the difference between primary and secondary sources.",
- f"""{crumb([("Home","../itconverts.html"),("Writing","./"),("Evaluate sources",None)])}
+ f"""{crumb([("Home","../Karo Convert.html"),("Writing","./"),("Evaluate sources",None)])}
 <article class="article"><div class="kicker">Research</div>
 <h1>How to evaluate sources</h1>
 <p class="lede">Good papers are built on good sources. Here’s a fast way to judge whether a source is worth citing.</p>
@@ -845,13 +845,13 @@ write("writing/how-to-evaluate-sources.html","How to evaluate sources — a cred
 <h2>Primary, secondary, tertiary</h2>
 <p>A <strong>primary</strong> source is first-hand (raw data, a letter, an experiment). A <strong>secondary</strong> source analyses primary ones (a journal review, a textbook). A <strong>tertiary</strong> source summarises the field (an encyclopedia). Strong papers lean on primary and peer-reviewed secondary sources.</p>
 <h2>Where the Study search fits</h2>
-<p>The <a href="../itconverts.html#ask">Study search</a> deliberately returns results only from trusted, ad-free educational sources, so you start from solid ground. Use it to orient yourself, then follow the references to primary and scholarly work — and cite <em>those</em>.</p>
+<p>The <a href="../Karo Convert.html#ask">Study search</a> deliberately returns results only from trusted, ad-free educational sources, so you start from solid ground. Use it to orient yourself, then follow the references to primary and scholarly work — and cite <em>those</em>.</p>
 {faq_block(qa)}{WDISC}</article>
 {cta(1,"Find credible sources","The Study search keeps you on trusted ground.")}""",1,
  jsonld(article_ld("How to evaluate sources","A credibility checklist and primary vs secondary sources.",f"{SITE}/writing/how-to-evaluate-sources.html"),faq_ld(qa)))
 
 # ============================== robots + sitemap ==============================
-pages = ["itconverts.html","about.html","privacy.html","terms.html","contact.html","guides/","writing/"] + ["guides/"+g[0] for g in GUIDES] + ["writing/"+w[0] for w in WRITING]
+pages = ["Karo Convert.html","about.html","privacy.html","terms.html","contact.html","guides/","writing/"] + ["guides/"+g[0] for g in GUIDES] + ["writing/"+w[0] for w in WRITING]
 urls = "".join(f"  <url><loc>{SITE}/{p}</loc><changefreq>monthly</changefreq></url>\n" for p in dict.fromkeys(pages))
 open(os.path.join(OUT,"sitemap.xml"),"w").write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
 open(os.path.join(OUT,"robots.txt"),"w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
