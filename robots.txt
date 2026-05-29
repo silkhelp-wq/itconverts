@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://itconverts.example/sitemap.xml
+Sitemap: https://karoconvert.com/sitemap.xml

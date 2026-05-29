@@ -1,5 +1,5 @@
 {
-  "name": "itconverts",
+  "name": "karo-convert",
   "version": "1.0.0",
   "private": true,
   "description": "itconverts — a free unit converter, scientific/graphing calculator, and curated educational search for students. Static site + Stripe serverless ad-free flow.",
