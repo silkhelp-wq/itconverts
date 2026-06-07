@@ -5,6 +5,7 @@
   "description": "Karo Convert — a free unit converter, scientific/graphing calculator, and curated educational search for students. Static site + Stripe serverless ad-free flow.",
   "license": "UNLICENSED",
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "stripe": "^17.0.0"
   },
   "comment": "No build step — this is a static site served from the repo root, plus Vercel serverless functions in /api. Vercel installs the dependency above for those functions."
