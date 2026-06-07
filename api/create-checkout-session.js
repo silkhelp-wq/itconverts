@@ -36,7 +36,7 @@ module.exports = async function handler(req, res) {
           unit_amount: amount,
           product_data: {
             name: 'Karo Convert — Go ad-free',
-            description: 'Removes ads and unlocks saved history. Thank you for supporting a free tool.'
+            description: 'Support Karo Convert and help keep this free tool running for everyone. Supporters browse ad-free.'
           }
         }
       }],
